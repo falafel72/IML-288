@@ -1,7 +1,5 @@
 size(720, 720);
 background(255);
-//stroke(255);
-//strokeWeight(5);
 strokeCap(ROUND);
 strokeJoin(ROUND);
 float[][] curvePoints = new float[4][2];
@@ -20,8 +18,5 @@ for (int i = 0; i < 10; i++) {
   curveVertex(curvePoints[2][0], curvePoints[2][1]);
   curveVertex(curvePoints[3][0], curvePoints[3][1]);
   curveVertex(curvePoints[3][0], curvePoints[3][1]);
-  /*curveVertex(curvePoints[1][0], curvePoints[1][1],
-         curvePoints[2][0], curvePoints[2][1],
-         curvePoints[3][0], curvePoints[3][1]);*/
   endShape(CLOSE);
 }
