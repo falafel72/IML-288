@@ -1,8 +1,3 @@
-// TO-DO
-// Play each sound for limited duration
-// Fix color transition
-// Trigger color transition only once
-
 import processing.sound.*;
 
 // Setup
@@ -14,7 +9,8 @@ int columns = 5;
 Box[][] boxes = new Box[rows][columns];
 
 // Color
-color[] lerp_colors = new color[20];
+color inactive = #F7B536;
+color active = #F7D536;
 
 // Sound
 SinOsc sine;
@@ -43,9 +39,8 @@ void setup() {
   // Calculate widths and heights of boxes
   rect_w = (width - margin*2) / columns;
   rect_h = (height - margin*2) / rows;
-  // Find transition colors
-  createLerpColors();
   background(255);
+  fill(inactive);
   stroke(#867C5F);
   // Create boxes
   int box_num = 0;
@@ -61,16 +56,6 @@ void setup() {
   sine = new SinOsc(this);
 }
 
-void createLerpColors() {
-  lerp_colors[0] = color(#F7B536);
-  lerp_colors[lerp_colors.length-1] = color(#F7D536);
-  // Create 10 intermediate colors
-  for (int i = 1; i < lerp_colors.length-1; i++) {
-    lerp_colors[i] = lerpColor(lerp_colors[0], lerp_colors[lerp_colors.length-1], 
-      float(i)/lerp_colors.length);
-  }
-}
-
 void draw() {
   // Continuously update boxes
   for (int i = 0; i < boxes.length; i++) {
@@ -83,7 +68,6 @@ void draw() {
 class Box {
   int x, y;
   float freq;
-  int state = 0;
 
   Box(int x, int y, float freq) {
     this.x = x;
@@ -91,42 +75,19 @@ class Box {
     this.freq = freq;
   }
 
-  void checkMouseOver() {
-    if ((mouseX > x) && (mouseX < x + rect_w) &&
-      (mouseY > y) && (mouseY < y + rect_h)) {
-      mouseOver();
-      while ((mouseX > x) && (mouseX < x + rect_w) &&
-        (mouseY > y) && (mouseY < y + rect_h)) {
-        state = 2;
-      }
-    } else {
-      state = 0;
-    }
-  }
-
-  void mouseOver() {
-    sine.play(freq, 1.0);
-    for (int i = 0; i < lerp_colors.length; i++) {
-      fill(lerp_colors[i]);
-      rect(x, y, rect_w, rect_h);
-    }
-  }
-
   void update() {
     // Check if mouse on box
-    if (state == 1) {
-      //sine.play(freq, 1.0);
-      // Transition to highlighted state
-      for (int i = 0; i < lerp_colors.length; i++) {
-        fill(lerp_colors[i]);
-        rect(x, y, rect_w, rect_h);
-      }
+    if ((mouseX > x) && (mouseX < x + rect_w) &&
+      (mouseY > y) && (mouseY < y + rect_h)) {
+      // Play sound
+      sine.play(freq, 1.0);
+      // Highlight box
+      fill(active);
+      rect(x, y, rect_w, rect_h);
     } else {
-      // Transition to not highlighted state
-      for (int i = lerp_colors.length - 1; i >= 0; i--) {
-        fill(lerp_colors[i]);
-        rect(x, y, rect_w, rect_h);
-      }
+      // Un-highlight box
+      fill(inactive);
+      rect(x, y, rect_w, rect_h);
       // Stop sound if mouse outside square
       if (!(mouseX > margin && mouseX < width-margin) || 
         !(mouseY > margin && mouseY < height-margin)) {
