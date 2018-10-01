@@ -16,6 +16,8 @@ ClearButton clear;
 UndoButton undo;
 TemplateButton love, learn, life;
 
+////////// SETUP //////////
+
 void setup() {
   size(1280, 720);
   background(220);
@@ -27,8 +29,9 @@ void setup() {
   zh_char_font = createFont("bodang-xingkai.ttf", 500);
   textAlign(LEFT, TOP);
   // Create controls
-  clear = new ClearButton(controls_left_x, margin);
+  clear = new ClearButton(controls_left_x, margin, 92, 48);
   textFont(en_system_font);
+  fill(0);
   text("TEMPLATES", controls_left_x, 150);
   love = new TemplateButton("LOVE", '爱', 
     controls_left_x, 200, 78, controls_height);
@@ -38,6 +41,10 @@ void setup() {
     controls_left_x + 213, 200, 65, controls_height);
   stroke(0);
 }
+
+////////// END SETUP //////////
+
+////////// DRAW //////////
 
 void draw() {
   if (mouseX > margin && mouseX < margin + canvas_w &&
@@ -85,21 +92,25 @@ void checkMouseDraw() {
   }
 }
 
-////////// CLEAR //////////
+////////// END DRAW //////////
 
-class ClearButton {
-  float x, y;
+////////// BUTTON CONTROLS //////////
+
+class Button {
+  float x, y, w, h;
   float padding = 10.0;
-  float w = 92.0;
-  float h = 48.0;
-
-  ClearButton(float x, float y) {
+  String text;
+  
+  Button() {}
+  
+  Button(float x, float y, float w, float h, String text) {
     this.x = x;
     this.y = y;
-
-    createDefault();
+    this.w = w;
+    this.h = h;
+    this.text = text;
   }
-
+  
   void createDefault() {
     fill(220);
     stroke(0);
@@ -108,9 +119,9 @@ class ClearButton {
     noStroke();
     fill(0);
     textFont(en_button_font);
-    text("CLEAR", x + padding, y + padding);
+    text(text, x + padding, y + padding);
   }
-
+  
   void createHighlighted() {
     fill(230);
     stroke(0);
@@ -119,7 +130,7 @@ class ClearButton {
     noStroke();
     fill(0);
     textFont(en_button_font);
-    text("CLEAR", x + padding, y + padding);
+    text(text, x + padding, y + padding);
   }
 
   public boolean isMouseOver() {
@@ -133,56 +144,31 @@ class ClearButton {
   }
 }
 
-////////// TEMPLATES //////////
+class ClearButton extends Button {
+  ClearButton(float x, float y, float w, float h) {
+    super(x, y, w, h, "CLEAR");
+  }
+}
 
-class TemplateButton {
-  String display_text;
+class UndoButton {
+  float x, y;
+  float w;
+  float h;
+  
+  UndoButton(float x, float y) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+class TemplateButton extends Button {
   char character;
-  float x, y, w, h;
-  float padding = 10.0;
 
   TemplateButton(String display_text, char character, 
     float x, float y, float w, float h) {
-    this.display_text = display_text;
+    super(x, y, w, h, display_text);
     this.character = character;
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-
-    createDefault();
-  }
-
-  void createDefault() {
-    fill(220);
-    stroke(0);
-    strokeWeight(2);
-    rect(x, y, w, h);
-    noStroke();
-    fill(0);
-    textFont(en_button_font);
-    text(display_text, x + padding, y + padding);
-  }
-
-  void createHighlighted() {
-    fill(230);
-    stroke(0);
-    strokeWeight(2);
-    rect(x, y, w, h);
-    noStroke();
-    fill(0);
-    textFont(en_button_font);
-    text(display_text, x + padding, y + padding);
-  }
-
-  public boolean isMouseOver() {
-    if (mouseX > x && mouseX < x + w &&
-      mouseY > y && mouseY < y + h) {
-      createHighlighted();
-      return true;
-    }
-    createDefault();
-    return false;
+    super.createDefault();
   }
 
   public void showCharacter() {
@@ -192,6 +178,10 @@ class TemplateButton {
     text(character, 190, 40);
   }
 }
+
+////////// END BUTTON CONTROLS //////////
+
+////////// MOUSE CONTROL //////////
 
 void checkMouseControl() {
   if (clear.isMouseOver()) {
