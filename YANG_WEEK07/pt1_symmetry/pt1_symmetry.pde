@@ -296,39 +296,21 @@ class ClearPill {
   }
 }
 
-class SymmetryButton {
+class Button {
   float x, y, w, h;
-  int symmetry;
   PImage icon;
 
-  SymmetryButton(int symmetry, PImage icon, 
-    float x, float y, float w, float h) {
+  Button() {
+  }
+
+  Button(PImage icon, float x, float y, float w, float h) {
     this.x = x;
     this.y = y;
     this.w = w;
     this.h = h;
-    this.symmetry = symmetry;
     this.icon = icon;
-
+    
     createDefault();
-  }
-
-  public void checkMouseOver() {
-    if (isMouseOver() && mousePressed) {
-      setSymmetry();
-    } else if (isMouseOver()) {
-      if (canvas_symmetry == symmetry) {
-        createSelected();
-      } else {
-        createHighlighted();
-      }
-    } else {
-      if (canvas_symmetry == symmetry) {
-        createSelected();
-      } else {
-        createDefault();
-      }
-    }
   }
 
   boolean isMouseOver() {
@@ -356,6 +338,35 @@ class SymmetryButton {
     strokeWeight(2);
     rect(x, y, w, h, button_radius);
     image(icon, x, y, h, h);
+  }
+}
+
+class SymmetryButton extends Button {
+  int symmetry;
+
+  SymmetryButton(int symmetry, PImage icon, 
+    float x, float y, float w, float h) {
+    super(icon, x, y, w, h);
+    this.symmetry = symmetry;
+    this.icon = icon;
+  }
+
+  public void checkMouseOver() {
+    if (super.isMouseOver() && mousePressed) {
+      setSymmetry();
+    } else if (super.isMouseOver()) {
+      if (canvas_symmetry == symmetry) {
+        super.createSelected();
+      } else {
+        super.createHighlighted();
+      }
+    } else {
+      if (canvas_symmetry == symmetry) {
+        super.createSelected();
+      } else {
+        super.createDefault();
+      }
+    }
   }
 
   public void setSymmetry() {
