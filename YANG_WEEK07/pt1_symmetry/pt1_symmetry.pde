@@ -2,6 +2,7 @@
 int margin = 50;
 int canvas_w = 1000;
 int canvas_h = 620;
+int canvas_bg = 1;
 
 // BRUSH
 float x, y, px, py, targetX, targetY;
@@ -19,10 +20,9 @@ int controls_height = 48;
 int button_radius = 5;
 PFont system_font, button_font;
 ClearPill clear;
-//SymmetryButton none, horizontal, vertical, quarters, sixths;
 SymmetryButton none, horizontal, vertical, quarters;
-//SymmetryButton[] buttons = new SymmetryButton[5];
-SymmetryButton[] buttons = new SymmetryButton[4];
+BgButton black, white;
+Button[] buttons = new Button[6];
 
 ////////// SETUP //////////
 
@@ -39,9 +39,8 @@ void setup() {
   text("CANVAS", controls_left_x, margin);
   ellipseMode(CORNER);
   clear = new ClearPill(controls_left_x, 100, 110, controls_height);
+  fill(0);
   text("SYMMETRY", controls_left_x, 200);
-  //none = new SymmetryButton(0, icon_n, 
-  //  controls_left_x, 250, controls_height, controls_height);
   none = new SymmetryButton(0, loadImage("sym_icon_n.png"), 
     controls_left_x, 250, controls_height, controls_height);
   horizontal = new SymmetryButton(1, loadImage("sym_icon_h.png"), 
@@ -50,13 +49,19 @@ void setup() {
     controls_left_x, 325, controls_height, controls_height);
   quarters = new SymmetryButton(3, loadImage("sym_icon_q.png"), 
     controls_left_x + 75, 325, controls_height, controls_height);
-  //sixths = new SymmetryButton(4, icon_s, 
-  //  controls_left_x, 550, controls_height, controls_height);
+  fill(0);
+  text("BACKGROUND", controls_left_x, 425);
+  black = new BgButton(0, loadImage("bg_icon_b.png"), 
+    controls_left_x, 475, controls_height, controls_height);
+  white = new BgButton(1, loadImage("bg_icon_w.png"), 
+    controls_left_x + 75, 475, controls_height, controls_height);
+  // Add buttons to array
   buttons[0] = none;
   buttons[1] = horizontal;
   buttons[2] = vertical;
   buttons[3] = quarters;
-  //buttons[4] = sixths;
+  buttons[4] = black;
+  buttons[5] = white;
   // Create canvas
   clearCanvas();
   // Set default symmetry to none
@@ -105,7 +110,11 @@ void draw() {
 
 void clearCanvas() {
   strokeWeight(1);
-  fill(255);
+  if (canvas_bg == 0) {
+    fill(0);
+  } else if (canvas_bg == 1) {
+    fill(255);
+  }
   rect(margin, margin, canvas_w, canvas_h);
   stroke(guides);
   switch(canvas_symmetry) {
@@ -125,16 +134,6 @@ void clearCanvas() {
     line(margin + 1, margin + canvas_h/2, 
       margin + canvas_w - 1, margin + canvas_h/2);
     break;
-    //case 4:
-    //  line(margin + canvas_w/2, margin + 1, 
-    //    margin + canvas_w/2, margin + canvas_h - 1);
-    //  line(margin + 1, margin + canvas_h/2, 
-    //    margin + canvas_w - 1, margin + canvas_h/2);
-    //  line(margin + 1, margin + 1, 
-    //    margin + canvas_w - 1, margin + canvas_h - 1);
-    //  line(margin + canvas_w - 1, margin + 1, 
-    //    margin + 1, margin + canvas_h - 1);
-    //  break;
   }
 }
 
@@ -309,7 +308,7 @@ class Button {
     this.w = w;
     this.h = h;
     this.icon = icon;
-    
+
     createDefault();
   }
 
@@ -338,6 +337,9 @@ class Button {
     strokeWeight(2);
     rect(x, y, w, h, button_radius);
     image(icon, x, y, h, h);
+  }
+  
+  public void checkMouseOver() {
   }
 }
 
@@ -371,6 +373,40 @@ class SymmetryButton extends Button {
 
   public void setSymmetry() {
     canvas_symmetry = symmetry;
+    createSelected();
+    clearCanvas();
+  }
+}
+
+class BgButton extends Button {
+  int bg;
+
+  BgButton(int bg, PImage icon, 
+    float x, float y, float w, float h) {
+    super(icon, x, y, w, h);
+    this.bg = bg;
+  }
+
+  public void checkMouseOver() {
+    if (super.isMouseOver() && mousePressed) {
+      setBg();
+    } else if (super.isMouseOver()) {
+      if (canvas_bg == bg) {
+        super.createSelected();
+      } else {
+        super.createHighlighted();
+      }
+    } else {
+      if (canvas_bg == bg) {
+        super.createSelected();
+      } else {
+        super.createDefault();
+      }
+    }
+  }
+
+  public void setBg() {
+    canvas_bg = bg;
     createSelected();
     clearCanvas();
   }
