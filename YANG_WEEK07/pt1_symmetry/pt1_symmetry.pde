@@ -5,7 +5,7 @@ int canvas_h = 620;
 
 // BRUSH
 float x, y, px, py, targetX, targetY;
-float easing = 0.1;
+float easing = 0.2;
 float stroke_weight;
 
 // SYMMETRY
@@ -160,6 +160,61 @@ void drawSymmetry() {
       image(symmetry_source, -canvas_w/2, -canvas_h*3/4 - 1);
       popMatrix();
     } else if (mouseY > margin + canvas_h/2) {
+      symmetry_source = get(margin, margin + canvas_h/2 + 1, canvas_w, canvas_h/2 - 1);
+      pushMatrix();
+      translate(margin + canvas_w/2, margin + canvas_h*3/4);
+      scale(1, -1);
+      image(symmetry_source, -canvas_w/2, canvas_h/4);
+      popMatrix();
+    }
+    break;
+  case 3:
+    if (mouseX <= margin + canvas_w/2 && mouseY <= margin + canvas_h/2) {
+      symmetry_source = get(margin, margin, canvas_w/2 - 1, canvas_h/2 - 1);
+      pushMatrix();
+      translate(margin + canvas_w/4, margin + canvas_h/4);
+      scale(-1, 1);
+      image(symmetry_source, -canvas_w*3/4 - 1, -canvas_h/4);
+      popMatrix();
+      symmetry_source = get(margin, margin, canvas_w, canvas_h/2);
+      pushMatrix();
+      translate(margin + canvas_w/2, margin + canvas_h/4);
+      scale(1, -1);
+      image(symmetry_source, -canvas_w/2, -canvas_h*3/4 - 1);
+      popMatrix();
+    } else if (mouseX > margin + canvas_w/2 && mouseY <= margin + canvas_h/2) {
+      symmetry_source = get(margin + canvas_w/2 + 1, margin, canvas_w/2 - 1, canvas_h/2 - 1);
+      pushMatrix();
+      translate(margin + canvas_w*3/4, margin + canvas_h/4);
+      scale(-1, 1);
+      image(symmetry_source, canvas_w/4, -canvas_h/4);
+      popMatrix();
+      symmetry_source = get(margin, margin, canvas_w, canvas_h/2);
+      pushMatrix();
+      translate(margin + canvas_w/2, margin + canvas_h/4);
+      scale(1, -1);
+      image(symmetry_source, -canvas_w/2, -canvas_h*3/4 - 1);
+      popMatrix();
+    } else if (mouseX <= margin + canvas_w/2 && mouseY > margin + canvas_h/2) {
+      symmetry_source = get(margin, margin + canvas_h/2 + 1, canvas_w/2 - 1, canvas_h/2 - 1);
+      pushMatrix();
+      translate(margin + canvas_w/4, margin + canvas_h*3/4);
+      scale(-1, 1);
+      image(symmetry_source, -canvas_w*3/4 - 1, -canvas_h/4 + 1);
+      popMatrix();
+      symmetry_source = get(margin, margin + canvas_h/2 + 1, canvas_w, canvas_h/2 - 1);
+      pushMatrix();
+      translate(margin + canvas_w/2, margin + canvas_h*3/4);
+      scale(1, -1);
+      image(symmetry_source, -canvas_w/2, canvas_h/4);
+      popMatrix();
+    } else if (mouseX > margin + canvas_w/2 && mouseY > margin + canvas_h/2) {
+      symmetry_source = get(margin + canvas_w/2 + 1, margin + canvas_h/2 + 1, canvas_w/2 - 1, canvas_h/2 - 1);
+      pushMatrix();
+      translate(margin + canvas_w*3/4, margin + canvas_h*3/4);
+      scale(-1, 1);
+      image(symmetry_source, canvas_w/4, -canvas_h/4 + 1);
+      popMatrix();
       symmetry_source = get(margin, margin + canvas_h/2 + 1, canvas_w, canvas_h/2 - 1);
       pushMatrix();
       translate(margin + canvas_w/2, margin + canvas_h*3/4);
