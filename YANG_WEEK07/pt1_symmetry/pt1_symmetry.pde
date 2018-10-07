@@ -18,7 +18,7 @@ int controls_left_x = 1080;
 int controls_height = 48;
 int button_radius = 5;
 PFont system_font, button_font;
-ClearButton clear;
+ClearPill clear;
 //SymmetryButton none, horizontal, vertical, quarters, sixths;
 SymmetryButton none, horizontal, vertical, quarters;
 //SymmetryButton[] buttons = new SymmetryButton[5];
@@ -34,18 +34,18 @@ void setup() {
   system_font = createFont("Karla-Regular.ttf", 32);
   button_font = createFont("Karla-Bold.ttf", 24);
   // Create icons
-  icon_n = loadImage("icon_none.png");
-  icon_h = loadImage("icon_horizontal.png");
-  icon_v = loadImage("icon_vertical.png");
-  icon_q = loadImage("icon_quarters.png");
-  icon_s = loadImage("icon_sixths.png");
+  icon_n = loadImage("sym_icon_n.png");
+  icon_h = loadImage("sym_icon_h.png");
+  icon_v = loadImage("sym_icon_v.png");
+  icon_q = loadImage("sym_icon_q.png");
+  icon_s = loadImage("sym_icon_s.png");
   // Create controls
   textAlign(LEFT, TOP);
   textFont(system_font);
   fill(0);
   text("CANVAS", controls_left_x, margin);
   ellipseMode(CORNER);
-  clear = new ClearButton(controls_left_x, 100, 110, controls_height);
+  clear = new ClearPill(controls_left_x, 100, 110, controls_height);
   text("SYMMETRY", controls_left_x, 200);
   none = new SymmetryButton(0, icon_n, 
     controls_left_x, 250, controls_height, controls_height);
@@ -130,16 +130,16 @@ void clearCanvas() {
     line(margin + 1, margin + canvas_h/2, 
       margin + canvas_w - 1, margin + canvas_h/2);
     break;
-  //case 4:
-  //  line(margin + canvas_w/2, margin + 1, 
-  //    margin + canvas_w/2, margin + canvas_h - 1);
-  //  line(margin + 1, margin + canvas_h/2, 
-  //    margin + canvas_w - 1, margin + canvas_h/2);
-  //  line(margin + 1, margin + 1, 
-  //    margin + canvas_w - 1, margin + canvas_h - 1);
-  //  line(margin + canvas_w - 1, margin + 1, 
-  //    margin + 1, margin + canvas_h - 1);
-  //  break;
+    //case 4:
+    //  line(margin + canvas_w/2, margin + 1, 
+    //    margin + canvas_w/2, margin + canvas_h - 1);
+    //  line(margin + 1, margin + canvas_h/2, 
+    //    margin + canvas_w - 1, margin + canvas_h/2);
+    //  line(margin + 1, margin + 1, 
+    //    margin + canvas_w - 1, margin + canvas_h - 1);
+    //  line(margin + canvas_w - 1, margin + 1, 
+    //    margin + 1, margin + canvas_h - 1);
+    //  break;
   }
 }
 
@@ -242,12 +242,12 @@ void drawSymmetry() {
 
 ////////// BUTTON CONTROLS //////////
 
-class ClearButton {
+class ClearPill {
   float x, y, w, h;
   float padding_x = 20.0;
   float padding_y = 10.0;
 
-  ClearButton(float x, float y, float w, float h) {
+  ClearPill(float x, float y, float w, float h) {
     // Shift to compensate for arc button edge
     this.x = x - 10;
     this.y = y;
@@ -290,10 +290,10 @@ class ClearButton {
     stroke(0);
     strokeWeight(2);
     beginShape();
-    vertex(x+30,y);
-    bezierVertex(x,y, x,y+h, x+30, y+h);
-    vertex(x+w-30,y+h);
-    bezierVertex(x+w,y+h, x+w,y, x+w-30,y);
+    vertex(x+30, y);
+    bezierVertex(x, y, x, y+h, x+30, y+h);
+    vertex(x+w-30, y+h);
+    bezierVertex(x+w, y+h, x+w, y, x+w-30, y);
     endShape(CLOSE);
     fill(0);
     textFont(button_font);
@@ -377,6 +377,6 @@ class SymmetryButton {
 void checkMouseControl() {
   clear.checkMouseOver();
   for (int i = 0; i < buttons.length; i++) {
-    buttons[i].checkMouseOver();    
+    buttons[i].checkMouseOver();
   }
 }
