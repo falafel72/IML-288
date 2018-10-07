@@ -132,9 +132,9 @@ void draw() {
 
 void drawSymmetry() {
   switch(canvas_symmetry) {
-    case 0:
+  case 0:
     break;
-    case 1:
+  case 1:
     if (mouseX <= margin + canvas_w/2) {
       symmetry_source = get(margin, margin, canvas_w/2 - 1, canvas_h);
       pushMatrix();
@@ -148,6 +148,23 @@ void drawSymmetry() {
       translate(margin + canvas_w*3/4, margin + canvas_h/2);
       scale(-1, 1);
       image(symmetry_source, canvas_w/4, -canvas_h/2);
+      popMatrix();
+    }
+    break;
+  case 2:
+    if (mouseY <= margin + canvas_h/2) {
+      symmetry_source = get(margin, margin, canvas_w, canvas_h/2 - 1);
+      pushMatrix();
+      translate(margin + canvas_w/2, margin + canvas_h/4);
+      scale(1, -1);
+      image(symmetry_source, -canvas_w/2, -canvas_h*3/4 - 1);
+      popMatrix();
+    } else if (mouseY > margin + canvas_h/2) {
+      symmetry_source = get(margin, margin + canvas_h/2 + 1, canvas_w, canvas_h/2 - 1);
+      pushMatrix();
+      translate(margin + canvas_w/2, margin + canvas_h*3/4);
+      scale(1, -1);
+      image(symmetry_source, -canvas_w/2, canvas_h/4);
       popMatrix();
     }
   }
