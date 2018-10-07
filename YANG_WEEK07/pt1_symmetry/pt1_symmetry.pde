@@ -11,6 +11,7 @@ float stroke_weight;
 // SYMMETRY
 int canvas_symmetry = 0;
 color guides = #56FFFE;
+PImage symmetry_source, symmetry_target;
 
 // CONTROLS
 int controls_left_x = 1080;
@@ -113,7 +114,14 @@ void draw() {
     }
     strokeWeight(stroke_weight);
     // If mousePressed, then draw line
-    checkMouseDraw();
+    if (mousePressed) {
+      if (mouseX > margin && mouseX < margin + canvas_w &&
+        mouseY > margin && mouseY < margin + canvas_h) {
+        line(px, py, x, y);
+        symmetry_source = createImage(canvas_w, canvas_h, RGB);
+        drawSymmetry();
+      }
+    }
     // Update px and py to new positions
     px = x;
     py = y;
@@ -122,12 +130,25 @@ void draw() {
   }
 }
 
-void checkMouseDraw() {
-  if (mousePressed) {
-    if (mouseX > margin && mouseX < margin + canvas_w &&
-      mouseY > margin && mouseY < margin + canvas_h) {
-      stroke(0);
-      line(px, py, x, y);
+void drawSymmetry() {
+  switch(canvas_symmetry) {
+    case 0:
+    break;
+    case 1:
+    if (mouseX <= margin + canvas_w/2) {
+      symmetry_source = get(margin, margin, canvas_w/2 - 1, canvas_h);
+      pushMatrix();
+      translate(margin + canvas_w/4, margin + canvas_h/2);
+      scale(-1, 1);
+      image(symmetry_source, -canvas_w*3/4 - 1, -canvas_h/2);
+      popMatrix();
+    } else if (mouseX > margin + canvas_w/2) {
+      symmetry_source = get(margin + canvas_w/2 + 1, margin, canvas_w/2 - 1, canvas_h);
+      pushMatrix();
+      translate(margin + canvas_w*3/4, margin + canvas_h/2);
+      scale(-1, 1);
+      image(symmetry_source, canvas_w/4, -canvas_h/2);
+      popMatrix();
     }
   }
 }
@@ -221,7 +242,6 @@ class SymmetryButton {
 
   void setSymmetry() {
     canvas_symmetry = symmetry;
-    println(canvas_symmetry);
     clearCanvas();
   }
 }
