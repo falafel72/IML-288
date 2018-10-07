@@ -19,8 +19,10 @@ int controls_height = 48;
 int button_radius = 5;
 PFont system_font, button_font;
 ClearButton clear;
-SymmetryButton none, horizontal, vertical, quarters, sixths;
-SymmetryButton[] buttons = new SymmetryButton[5];
+//SymmetryButton none, horizontal, vertical, quarters, sixths;
+SymmetryButton none, horizontal, vertical, quarters;
+//SymmetryButton[] buttons = new SymmetryButton[5];
+SymmetryButton[] buttons = new SymmetryButton[4];
 PImage icon_n, icon_h, icon_v, icon_q, icon_s;
 
 ////////// SETUP //////////
@@ -53,13 +55,13 @@ void setup() {
     controls_left_x, 400, controls_height, controls_height);
   quarters = new SymmetryButton(3, icon_q, 
     controls_left_x, 475, controls_height, controls_height);
-  sixths = new SymmetryButton(4, icon_s, 
-    controls_left_x, 550, controls_height, controls_height);
+  //sixths = new SymmetryButton(4, icon_s, 
+  //  controls_left_x, 550, controls_height, controls_height);
   buttons[0] = none;
   buttons[1] = horizontal;
   buttons[2] = vertical;
   buttons[3] = quarters;
-  buttons[4] = sixths;
+  //buttons[4] = sixths;
   // Create canvas
   clearCanvas();
   // Set default symmetry to none
@@ -128,16 +130,16 @@ void clearCanvas() {
     line(margin + 1, margin + canvas_h/2, 
       margin + canvas_w - 1, margin + canvas_h/2);
     break;
-  case 4:
-    line(margin + canvas_w/2, margin + 1, 
-      margin + canvas_w/2, margin + canvas_h - 1);
-    line(margin + 1, margin + canvas_h/2, 
-      margin + canvas_w - 1, margin + canvas_h/2);
-    line(margin + 1, margin + 1, 
-      margin + canvas_w - 1, margin + canvas_h - 1);
-    line(margin + canvas_w - 1, margin + 1, 
-      margin + 1, margin + canvas_h - 1);
-    break;
+  //case 4:
+  //  line(margin + canvas_w/2, margin + 1, 
+  //    margin + canvas_w/2, margin + canvas_h - 1);
+  //  line(margin + 1, margin + canvas_h/2, 
+  //    margin + canvas_w - 1, margin + canvas_h/2);
+  //  line(margin + 1, margin + 1, 
+  //    margin + canvas_w - 1, margin + canvas_h - 1);
+  //  line(margin + canvas_w - 1, margin + 1, 
+  //    margin + 1, margin + canvas_h - 1);
+  //  break;
   }
 }
 
