@@ -50,11 +50,11 @@ void setup() {
   none = new SymmetryButton(0, icon_n, 
     controls_left_x, 250, controls_height, controls_height);
   horizontal = new SymmetryButton(1, icon_h, 
-    controls_left_x, 325, controls_height, controls_height);
+    controls_left_x + 75, 250, controls_height, controls_height);
   vertical = new SymmetryButton(2, icon_v, 
-    controls_left_x, 400, controls_height, controls_height);
+    controls_left_x, 325, controls_height, controls_height);
   quarters = new SymmetryButton(3, icon_q, 
-    controls_left_x, 475, controls_height, controls_height);
+    controls_left_x + 75, 325, controls_height, controls_height);
   //sixths = new SymmetryButton(4, icon_s, 
   //  controls_left_x, 550, controls_height, controls_height);
   buttons[0] = none;
