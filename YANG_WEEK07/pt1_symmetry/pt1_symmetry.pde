@@ -16,9 +16,10 @@ PImage symmetry_source, symmetry_target;
 // CONTROLS
 int controls_left_x = 1080;
 int controls_height = 48;
-PFont en_system_font, en_button_font;
+PFont system_font, button_font;
 ClearButton clear;
 SymmetryButton none, horizontal, vertical, quarters, sixths;
+SymmetryButton[] buttons = new SymmetryButton[5];
 PImage icon_n, icon_h, icon_v, icon_q, icon_s;
 
 ////////// SETUP //////////
@@ -27,8 +28,8 @@ void setup() {
   size(1280, 720);
   background(220);
   // Create fonts
-  en_system_font = createFont("Karla-Regular.ttf", 32);
-  en_button_font = createFont("Karla-Bold.ttf", 24);
+  system_font = createFont("Karla-Regular.ttf", 32);
+  button_font = createFont("Karla-Bold.ttf", 24);
   // Create icons
   icon_n = loadImage("icon_none.png");
   icon_h = loadImage("icon_horizontal.png");
@@ -37,7 +38,7 @@ void setup() {
   icon_s = loadImage("icon_sixths.png");
   // Create controls
   textAlign(LEFT, TOP);
-  textFont(en_system_font);
+  textFont(system_font);
   fill(0);
   text("CANVAS", controls_left_x, margin);
   clear = new ClearButton(controls_left_x, 100, 92, controls_height);
@@ -52,8 +53,14 @@ void setup() {
     controls_left_x, 475, controls_height, controls_height);
   sixths = new SymmetryButton(4, icon_s, 
     controls_left_x, 550, controls_height, controls_height);
+  buttons[0] = none;
+  buttons[1] = horizontal;
+  buttons[2] = vertical;
+  buttons[3] = quarters;
+  buttons[4] = sixths;
   // Create canvas
   clearCanvas();
+  // Set default symmetry to none
   none.setSymmetry();
 }
 
@@ -278,7 +285,7 @@ class ClearButton {
     strokeWeight(2);
     rect(x, y, w, h);
     fill(0);
-    textFont(en_button_font);
+    textFont(button_font);
     text("CLEAR", x + padding, y + padding);
   }
 }
@@ -358,9 +365,7 @@ class SymmetryButton {
 
 void checkMouseControl() {
   clear.checkMouseOver();
-  none.checkMouseOver();
-  horizontal.checkMouseOver();
-  vertical.checkMouseOver();
-  quarters.checkMouseOver();
-  sixths.checkMouseOver();
+  for (int i = 0; i < buttons.length; i++) {
+    buttons[i].checkMouseOver();    
+  }
 }
