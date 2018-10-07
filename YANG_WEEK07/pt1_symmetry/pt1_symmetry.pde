@@ -26,7 +26,6 @@ PImage icon_n, icon_h, icon_v, icon_q, icon_s;
 void setup() {
   size(1280, 720);
   background(220);
-  clearCanvas();
   // Create fonts
   en_system_font = createFont("Karla-Regular.ttf", 32);
   en_button_font = createFont("Karla-Bold.ttf", 24);
@@ -41,7 +40,7 @@ void setup() {
   textFont(en_system_font);
   fill(0);
   text("CANVAS", controls_left_x, margin);
-  clear = new ClearButton(controls_left_x, 100, 92, 48);
+  clear = new ClearButton(controls_left_x, 100, 92, controls_height);
   text("SYMMETRY", controls_left_x, 200);
   none = new SymmetryButton(0, icon_n, 
     controls_left_x, 250, controls_height, controls_height);
@@ -53,46 +52,14 @@ void setup() {
     controls_left_x, 475, controls_height, controls_height);
   sixths = new SymmetryButton(4, icon_s, 
     controls_left_x, 550, controls_height, controls_height);
+  // Create canvas
+  clearCanvas();
+  none.setSymmetry();
 }
 
 ////////// END SETUP //////////
 
 ////////// DRAW //////////
-
-void clearCanvas() {
-  strokeWeight(1);
-  fill(255);
-  rect(margin, margin, canvas_w, canvas_h);
-  stroke(guides);
-  switch(canvas_symmetry) {
-  case 0:
-    break;
-  case 1:
-    line(margin + canvas_w/2, margin + 1, 
-      margin + canvas_w/2, margin + canvas_h - 1);
-    break;
-  case 2:
-    line(margin + 1, margin + canvas_h/2, 
-      margin + canvas_w - 1, margin + canvas_h/2);
-    break;
-  case 3:
-    line(margin + canvas_w/2, margin + 1, 
-      margin + canvas_w/2, margin + canvas_h - 1);
-    line(margin + 1, margin + canvas_h/2, 
-      margin + canvas_w - 1, margin + canvas_h/2);
-    break;
-  case 4:
-    line(margin + canvas_w/2, margin + 1, 
-      margin + canvas_w/2, margin + canvas_h - 1);
-    line(margin + 1, margin + canvas_h/2, 
-      margin + canvas_w - 1, margin + canvas_h/2);
-    line(margin + 1, margin + 1, 
-      margin + canvas_w - 1, margin + canvas_h - 1);
-    line(margin + canvas_w - 1, margin + 1, 
-      margin + 1, margin + canvas_h - 1);
-    break;
-  }
-}
 
 void draw() {
   if (mouseX > margin && mouseX < margin + canvas_w &&
@@ -127,6 +94,41 @@ void draw() {
     py = y;
   } else {
     checkMouseControl();
+  }
+}
+
+void clearCanvas() {
+  strokeWeight(1);
+  fill(255);
+  rect(margin, margin, canvas_w, canvas_h);
+  stroke(guides);
+  switch(canvas_symmetry) {
+  case 0:
+    break;
+  case 1:
+    line(margin + canvas_w/2, margin + 1, 
+      margin + canvas_w/2, margin + canvas_h - 1);
+    break;
+  case 2:
+    line(margin + 1, margin + canvas_h/2, 
+      margin + canvas_w - 1, margin + canvas_h/2);
+    break;
+  case 3:
+    line(margin + canvas_w/2, margin + 1, 
+      margin + canvas_w/2, margin + canvas_h - 1);
+    line(margin + 1, margin + canvas_h/2, 
+      margin + canvas_w - 1, margin + canvas_h/2);
+    break;
+  case 4:
+    line(margin + canvas_w/2, margin + 1, 
+      margin + canvas_w/2, margin + canvas_h - 1);
+    line(margin + 1, margin + canvas_h/2, 
+      margin + canvas_w - 1, margin + canvas_h/2);
+    line(margin + 1, margin + 1, 
+      margin + canvas_w - 1, margin + canvas_h - 1);
+    line(margin + canvas_w - 1, margin + 1, 
+      margin + 1, margin + canvas_h - 1);
+    break;
   }
 }
 
@@ -240,32 +242,44 @@ class ClearButton {
     this.h = h;
   }
 
+  public void checkMouseOver() {
+    if (isMouseOver() && mousePressed) {
+      createPressed();
+      clearCanvas();
+    } else if (isMouseOver()) {
+      createHighlighted();
+    } else {
+      createDefault();
+    }
+  }
+
+  boolean isMouseOver() {
+    return (mouseX > x && mouseX < x + w &&
+      mouseY > y && mouseY < y + h);
+  }
+
   void createDefault() {
     fill(220);
-    strokeWeight(2);
-    rect(x, y, w, h);
-    fill(0);
-    textFont(en_button_font);
-    text("CLEAR", x + padding, y + padding);
+    makeButton();
   }
 
   void createHighlighted() {
     fill(230);
+    makeButton();
+  }
+
+  void createPressed() {
+    fill(200);
+    makeButton();
+  }
+
+  void makeButton() {
+    stroke(0);
     strokeWeight(2);
     rect(x, y, w, h);
     fill(0);
     textFont(en_button_font);
     text("CLEAR", x + padding, y + padding);
-  }
-
-  public boolean isMouseOver() {
-    if (mouseX > x && mouseX < x + w &&
-      mouseY > y && mouseY < y + h) {
-      createHighlighted();
-      return true;
-    }
-    createDefault();
-    return false;
   }
 }
 
@@ -286,34 +300,54 @@ class SymmetryButton {
     createDefault();
   }
 
+  public void checkMouseOver() {
+    if (isMouseOver() && mousePressed) {
+      setSymmetry();
+    } else if (isMouseOver()) {
+      if (canvas_symmetry == symmetry) {
+        createSelected();
+      } else {
+        createHighlighted();
+      }
+    } else {
+      if (canvas_symmetry == symmetry) {
+        createSelected();
+      } else {
+        createDefault();
+      }
+    }
+  }
+
+  boolean isMouseOver() {
+    return (mouseX > x && mouseX < x + w &&
+      mouseY > y && mouseY < y + h);
+  }
+
   void createDefault() {
     fill(220);
-    stroke(0);
-    strokeWeight(2);
-    rect(x, y, w, h);
-    image(icon, x, y, 48, 48);
+    makeButton();
   }
 
   void createHighlighted() {
     fill(230);
+    makeButton();
+  }
+
+  void createSelected() {
+    fill(200);
+    makeButton();
+  }
+
+  void makeButton() {
     stroke(0);
     strokeWeight(2);
     rect(x, y, w, h);
-    image(icon, x, y, 49, 49);
+    image(icon, x, y, h, h);
   }
 
-  public boolean isMouseOver() {
-    if (mouseX > x && mouseX < x + w &&
-      mouseY > y && mouseY < y + h) {
-      createHighlighted();
-      return true;
-    }
-    createDefault();
-    return false;
-  }
-
-  void setSymmetry() {
+  public void setSymmetry() {
     canvas_symmetry = symmetry;
+    createSelected();
     clearCanvas();
   }
 }
@@ -323,34 +357,10 @@ class SymmetryButton {
 ////////// MOUSE CONTROL //////////
 
 void checkMouseControl() {
-  if (clear.isMouseOver()) {
-    if (mousePressed) {
-      clearCanvas();
-    }
-  }
-  if (none.isMouseOver()) {
-    if (mousePressed) {
-      none.setSymmetry();
-    }
-  }
-  if (horizontal.isMouseOver()) {
-    if (mousePressed) {
-      horizontal.setSymmetry();
-    }
-  }
-  if (vertical.isMouseOver()) {
-    if (mousePressed) {
-      vertical.setSymmetry();
-    }
-  }
-  if (quarters.isMouseOver()) {
-    if (mousePressed) {
-      quarters.setSymmetry();
-    }
-  }
-  if (sixths.isMouseOver()) {
-    if (mousePressed) {
-      sixths.setSymmetry();
-    }
-  }
+  clear.checkMouseOver();
+  none.checkMouseOver();
+  horizontal.checkMouseOver();
+  vertical.checkMouseOver();
+  quarters.checkMouseOver();
+  sixths.checkMouseOver();
 }
