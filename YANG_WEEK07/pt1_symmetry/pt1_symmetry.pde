@@ -10,6 +10,7 @@ float stroke_weight;
 
 // SYMMETRY
 int canvas_symmetry = 0;
+color guides = #56FFFE;
 
 // CONTROLS
 int controls_left_x = 1080;
@@ -41,15 +42,15 @@ void setup() {
   text("CANVAS", controls_left_x, margin);
   clear = new ClearButton(controls_left_x, 100, 92, 48);
   text("SYMMETRY", controls_left_x, 200);
-  none = new SymmetryButton(0, icon_n,
+  none = new SymmetryButton(0, icon_n, 
     controls_left_x, 250, controls_height, controls_height);
-  horizontal = new SymmetryButton(0, icon_h,
+  horizontal = new SymmetryButton(1, icon_h, 
     controls_left_x, 325, controls_height, controls_height);
-  vertical = new SymmetryButton(1, icon_v,
+  vertical = new SymmetryButton(2, icon_v, 
     controls_left_x, 400, controls_height, controls_height);
-  quarters = new SymmetryButton(2, icon_q,
+  quarters = new SymmetryButton(3, icon_q, 
     controls_left_x, 475, controls_height, controls_height);
-  sixths = new SymmetryButton(3, icon_s,
+  sixths = new SymmetryButton(4, icon_s, 
     controls_left_x, 550, controls_height, controls_height);
 }
 
@@ -58,7 +59,38 @@ void setup() {
 ////////// DRAW //////////
 
 void clearCanvas() {
+  strokeWeight(1);
+  fill(255);
   rect(margin, margin, canvas_w, canvas_h);
+  stroke(guides);
+  switch(canvas_symmetry) {
+  case 0:
+    break;
+  case 1:
+    line(margin + canvas_w/2, margin + 1, 
+      margin + canvas_w/2, margin + canvas_h - 1);
+    break;
+  case 2:
+    line(margin + 1, margin + canvas_h/2, 
+      margin + canvas_w - 1, margin + canvas_h/2);
+    break;
+  case 3:
+    line(margin + canvas_w/2, margin + 1, 
+      margin + canvas_w/2, margin + canvas_h - 1);
+    line(margin + 1, margin + canvas_h/2, 
+      margin + canvas_w - 1, margin + canvas_h/2);
+    break;
+  case 4:
+    line(margin + canvas_w/2, margin + 1, 
+      margin + canvas_w/2, margin + canvas_h - 1);
+    line(margin + 1, margin + canvas_h/2, 
+      margin + canvas_w - 1, margin + canvas_h/2);
+    line(margin + 1, margin + 1, 
+      margin + canvas_w - 1, margin + canvas_h - 1);
+    line(margin + canvas_w - 1, margin + 1, 
+      margin + 1, margin + canvas_h - 1);
+    break;
+  }
 }
 
 void draw() {
@@ -107,14 +139,14 @@ void checkMouseDraw() {
 class ClearButton {
   float x, y, w, h;
   float padding = 10.0;
-  
+
   ClearButton(float x, float y, float w, float h) {
     this.x = x;
     this.y = y;
     this.w = w;
     this.h = h;
   }
-  
+
   void createDefault() {
     fill(220);
     strokeWeight(2);
@@ -149,7 +181,7 @@ class SymmetryButton {
   int symmetry;
   PImage icon;
 
-  SymmetryButton(int symmetry, PImage icon,
+  SymmetryButton(int symmetry, PImage icon, 
     float x, float y, float w, float h) {
     this.x = x;
     this.y = y;
@@ -157,10 +189,10 @@ class SymmetryButton {
     this.h = h;
     this.symmetry = symmetry;
     this.icon = icon;
-    
+
     createDefault();
   }
-  
+
   void createDefault() {
     fill(220);
     stroke(0);
@@ -168,7 +200,7 @@ class SymmetryButton {
     rect(x, y, w, h);
     image(icon, x, y, 48, 48);
   }
-  
+
   void createHighlighted() {
     fill(230);
     stroke(0);
@@ -186,9 +218,11 @@ class SymmetryButton {
     createDefault();
     return false;
   }
-  
+
   void setSymmetry() {
     canvas_symmetry = symmetry;
+    println(canvas_symmetry);
+    clearCanvas();
   }
 }
 
