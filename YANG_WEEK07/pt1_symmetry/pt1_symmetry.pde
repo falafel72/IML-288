@@ -23,7 +23,6 @@ ClearPill clear;
 SymmetryButton none, horizontal, vertical, quarters;
 //SymmetryButton[] buttons = new SymmetryButton[5];
 SymmetryButton[] buttons = new SymmetryButton[4];
-PImage icon_n, icon_h, icon_v, icon_q, icon_s;
 
 ////////// SETUP //////////
 
@@ -33,12 +32,6 @@ void setup() {
   // Create fonts
   system_font = createFont("Karla-Regular.ttf", 32);
   button_font = createFont("Karla-Bold.ttf", 24);
-  // Create icons
-  icon_n = loadImage("sym_icon_n.png");
-  icon_h = loadImage("sym_icon_h.png");
-  icon_v = loadImage("sym_icon_v.png");
-  icon_q = loadImage("sym_icon_q.png");
-  icon_s = loadImage("sym_icon_s.png");
   // Create controls
   textAlign(LEFT, TOP);
   textFont(system_font);
@@ -47,13 +40,15 @@ void setup() {
   ellipseMode(CORNER);
   clear = new ClearPill(controls_left_x, 100, 110, controls_height);
   text("SYMMETRY", controls_left_x, 200);
-  none = new SymmetryButton(0, icon_n, 
+  //none = new SymmetryButton(0, icon_n, 
+  //  controls_left_x, 250, controls_height, controls_height);
+  none = new SymmetryButton(0, loadImage("sym_icon_n.png"), 
     controls_left_x, 250, controls_height, controls_height);
-  horizontal = new SymmetryButton(1, icon_h, 
+  horizontal = new SymmetryButton(1, loadImage("sym_icon_h.png"), 
     controls_left_x + 75, 250, controls_height, controls_height);
-  vertical = new SymmetryButton(2, icon_v, 
+  vertical = new SymmetryButton(2, loadImage("sym_icon_v.png"), 
     controls_left_x, 325, controls_height, controls_height);
-  quarters = new SymmetryButton(3, icon_q, 
+  quarters = new SymmetryButton(3, loadImage("sym_icon_q.png"), 
     controls_left_x + 75, 325, controls_height, controls_height);
   //sixths = new SymmetryButton(4, icon_s, 
   //  controls_left_x, 550, controls_height, controls_height);
