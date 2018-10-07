@@ -16,6 +16,7 @@ PImage symmetry_source, symmetry_target;
 // CONTROLS
 int controls_left_x = 1080;
 int controls_height = 48;
+int button_radius = 5;
 PFont system_font, button_font;
 ClearButton clear;
 SymmetryButton none, horizontal, vertical, quarters, sixths;
@@ -41,7 +42,8 @@ void setup() {
   textFont(system_font);
   fill(0);
   text("CANVAS", controls_left_x, margin);
-  clear = new ClearButton(controls_left_x, 100, 92, controls_height);
+  ellipseMode(CORNER);
+  clear = new ClearButton(controls_left_x, 100, 110, controls_height);
   text("SYMMETRY", controls_left_x, 200);
   none = new SymmetryButton(0, icon_n, 
     controls_left_x, 250, controls_height, controls_height);
@@ -240,10 +242,12 @@ void drawSymmetry() {
 
 class ClearButton {
   float x, y, w, h;
-  float padding = 10.0;
+  float padding_x = 20.0;
+  float padding_y = 10.0;
 
   ClearButton(float x, float y, float w, float h) {
-    this.x = x;
+    // Shift to compensate for arc button edge
+    this.x = x - 10;
     this.y = y;
     this.w = w;
     this.h = h;
@@ -283,10 +287,15 @@ class ClearButton {
   void makeButton() {
     stroke(0);
     strokeWeight(2);
-    rect(x, y, w, h);
+    beginShape();
+    vertex(x+30,y);
+    bezierVertex(x,y, x,y+h, x+30, y+h);
+    vertex(x+w-30,y+h);
+    bezierVertex(x+w,y+h, x+w,y, x+w-30,y);
+    endShape(CLOSE);
     fill(0);
     textFont(button_font);
-    text("CLEAR", x + padding, y + padding);
+    text("CLEAR", x + padding_x, y + padding_y);
   }
 }
 
@@ -348,7 +357,7 @@ class SymmetryButton {
   void makeButton() {
     stroke(0);
     strokeWeight(2);
-    rect(x, y, w, h);
+    rect(x, y, w, h, button_radius);
     image(icon, x, y, h, h);
   }
 
