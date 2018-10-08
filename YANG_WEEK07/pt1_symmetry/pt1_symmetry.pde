@@ -17,7 +17,7 @@ PImage symmetry_source, symmetry_target;
 
 // CONTROLS
 int panel_left = 1080;
-int controls_height = 48;
+int button_sz = 48;
 int button_radius = 5;
 PFont system_font, button_font;
 ClearPill clear;
@@ -41,36 +41,26 @@ void setup() {
   fill(0);
   text("CANVAS", panel_left, 50);
   ellipseMode(CORNER);
-  clear = new ClearPill(panel_left, 90, 110, controls_height);
+  clear = new ClearPill(panel_left, 90, 110, button_sz);
   // Symmetry
   fill(0);
   text("SYMMETRY", panel_left, 170);
-  none = new SymmetryButton(0, loadImage("sym_icon_n.png"), 
-    panel_left, 210, controls_height, controls_height);
-  horizontal = new SymmetryButton(1, loadImage("sym_icon_h.png"), 
-    panel_left + 70, 210, controls_height, controls_height);
-  vertical = new SymmetryButton(2, loadImage("sym_icon_v.png"), 
-    panel_left, 280, controls_height, controls_height);
-  quarters = new SymmetryButton(3, loadImage("sym_icon_q.png"), 
-    panel_left + 70, 280, controls_height, controls_height);
+  none = new SymmetryButton(0, loadImage("sym_icon_n.png"), panel_left, 210);
+  horizontal = new SymmetryButton(1, loadImage("sym_icon_h.png"), panel_left + 70, 210);
+  vertical = new SymmetryButton(2, loadImage("sym_icon_v.png"), panel_left, 280);
+  quarters = new SymmetryButton(3, loadImage("sym_icon_q.png"), panel_left + 70, 280);
   // Background
   fill(0);
   text("BACKGROUND", panel_left, 360);
-  white = new BgButton(1, loadImage("bg_icon_w.png"), 
-    panel_left, 400, controls_height, controls_height);
-  black = new BgButton(0, loadImage("bg_icon_b.png"), 
-    panel_left + 70, 400, controls_height, controls_height);
+  white = new BgButton(1, loadImage("bg_icon_w.png"), panel_left, 400);
+  black = new BgButton(0, loadImage("bg_icon_b.png"), panel_left + 70, 400);
   // Stroke
   fill(0);
   text("STROKE", panel_left, 480);
-  bw = new StrokeButton("bw", loadImage("stroke_icon_bw.png"), 
-    panel_left, 520, controls_height, controls_height);
-  gb = new StrokeButton("gb", loadImage("stroke_icon_gb.png"), 
-    panel_left + 70, 520, controls_height, controls_height);
-  rb = new StrokeButton("rb", loadImage("stroke_icon_rb.png"), 
-    panel_left, 590, controls_height, controls_height);
-  ry = new StrokeButton("ry", loadImage("stroke_icon_ry.png"), 
-    panel_left + 70, 590, controls_height, controls_height);
+  bw = new StrokeButton("bw", loadImage("stroke_icon_bw.png"), panel_left, 520);
+  gb = new StrokeButton("gb", loadImage("stroke_icon_gb.png"), panel_left + 70, 520);
+  rb = new StrokeButton("rb", loadImage("stroke_icon_rb.png"), panel_left, 590);
+  ry = new StrokeButton("ry", loadImage("stroke_icon_ry.png"), panel_left + 70, 590);
   // Add buttons to array
   buttons[0] = none;
   buttons[1] = horizontal;
@@ -377,17 +367,18 @@ class ClearPill {
 ////////// BUTTONS //////////
 
 class Button {
-  float x, y, w, h;
+  float x, y;
   PImage icon;
 
   Button() {
   }
 
+  //Button(PImage icon, float x, float y, float w, float h) {
   Button(PImage icon, float x, float y, float w, float h) {
     this.x = x;
     this.y = y;
-    this.w = w;
-    this.h = h;
+    //this.w = w;
+    //this.h = h;
     this.icon = icon;
 
     createDefault();
@@ -397,8 +388,8 @@ class Button {
   }
 
   boolean isMouseOver() {
-    return (mouseX > x && mouseX < x + w &&
-      mouseY > y && mouseY < y + h);
+    return (mouseX > x && mouseX < x + button_sz &&
+      mouseY > y && mouseY < y + button_sz);
   }
 
   void createDefault() {
@@ -419,8 +410,8 @@ class Button {
   void makeButton() {
     stroke(0);
     strokeWeight(2);
-    rect(x, y, w, h, button_radius);
-    image(icon, x, y, h, h);
+    rect(x, y, button_sz, button_sz, button_radius);
+    image(icon, x, y, button_sz, button_sz);
   }
 }
 
@@ -428,8 +419,8 @@ class SymmetryButton extends Button {
   int symmetry;
 
   SymmetryButton(int symmetry, PImage icon, 
-    float x, float y, float w, float h) {
-    super(icon, x, y, w, h);
+    float x, float y) {
+    super(icon, x, y, button_sz, button_sz);
     this.symmetry = symmetry;
     this.icon = icon;
   }
@@ -464,8 +455,8 @@ class BgButton extends Button {
   int bg;
 
   BgButton(int bg, PImage icon, 
-    float x, float y, float w, float h) {
-    super(icon, x, y, w, h);
+    float x, float y) {
+    super(icon, x, y, button_sz, button_sz);
     this.bg = bg;
   }
 
@@ -499,8 +490,8 @@ class StrokeButton extends Button {
   String stroke;
 
   StrokeButton(String stroke, PImage icon, 
-    float x, float y, float w, float h) {
-    super(icon, x, y, w, h);
+    float x, float y) {
+    super(icon, x, y, button_sz, button_sz);
     this.stroke = stroke;
   }
 
