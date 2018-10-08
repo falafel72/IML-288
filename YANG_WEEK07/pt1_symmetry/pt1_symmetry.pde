@@ -1,4 +1,4 @@
-// CANVAS
+// CANVAS //<>//
 int margin = 50;
 int canvas_w = 1000;
 int canvas_h = 620;
@@ -8,6 +8,7 @@ int canvas_bg = 1;
 float x, y, px, py, targetX, targetY;
 float easing = 0.2;
 float stroke_weight;
+String brush_stroke = "bw";
 
 // SYMMETRY
 int canvas_symmetry = 0;
@@ -15,14 +16,15 @@ color guides = #56FFFE;
 PImage symmetry_source, symmetry_target;
 
 // CONTROLS
-int controls_left_x = 1080;
+int panel_left = 1080;
 int controls_height = 48;
 int button_radius = 5;
 PFont system_font, button_font;
 ClearPill clear;
 SymmetryButton none, horizontal, vertical, quarters;
-BgButton black, white;
-Button[] buttons = new Button[6];
+BgButton white, black;
+StrokeButton bw, gb, rb, ry;
+Button[] buttons = new Button[10];
 
 ////////// SETUP //////////
 
@@ -30,42 +32,54 @@ void setup() {
   size(1280, 720);
   background(220);
   // Create fonts
-  system_font = createFont("Karla-Regular.ttf", 32);
-  button_font = createFont("Karla-Bold.ttf", 24);
+  system_font = createFont("Karla-Regular.ttf", 26);
+  button_font = createFont("Karla-Bold.ttf", 22);
   // Create controls
   textAlign(LEFT, TOP);
   textFont(system_font);
   fill(0);
-  text("CANVAS", controls_left_x, margin);
+  text("CANVAS", panel_left, 50);
   ellipseMode(CORNER);
-  clear = new ClearPill(controls_left_x, 100, 110, controls_height);
+  clear = new ClearPill(panel_left, 90, 110, controls_height);
   fill(0);
-  text("SYMMETRY", controls_left_x, 200);
+  text("SYMMETRY", panel_left, 170);
   none = new SymmetryButton(0, loadImage("sym_icon_n.png"), 
-    controls_left_x, 250, controls_height, controls_height);
+    panel_left, 210, controls_height, controls_height);
   horizontal = new SymmetryButton(1, loadImage("sym_icon_h.png"), 
-    controls_left_x + 75, 250, controls_height, controls_height);
+    panel_left + 70, 210, controls_height, controls_height);
   vertical = new SymmetryButton(2, loadImage("sym_icon_v.png"), 
-    controls_left_x, 325, controls_height, controls_height);
+    panel_left, 280, controls_height, controls_height);
   quarters = new SymmetryButton(3, loadImage("sym_icon_q.png"), 
-    controls_left_x + 75, 325, controls_height, controls_height);
+    panel_left + 70, 280, controls_height, controls_height);
   fill(0);
-  text("BACKGROUND", controls_left_x, 425);
-  black = new BgButton(0, loadImage("bg_icon_b.png"), 
-    controls_left_x, 475, controls_height, controls_height);
+  text("BACKGROUND", panel_left, 360);
   white = new BgButton(1, loadImage("bg_icon_w.png"), 
-    controls_left_x + 75, 475, controls_height, controls_height);
+    panel_left, 400, controls_height, controls_height);
+  black = new BgButton(0, loadImage("bg_icon_b.png"), 
+    panel_left + 70, 400, controls_height, controls_height);
+  fill(0);
+  text("STROKE", panel_left, 480);
+  bw = new StrokeButton("bw", loadImage("stroke_icon_bw.png"), 
+    panel_left, 520, controls_height, controls_height);
+  gb = new StrokeButton("gb", loadImage("stroke_icon_gb.png"), 
+    panel_left + 70, 520, controls_height, controls_height);
+  rb = new StrokeButton("rb", loadImage("stroke_icon_rb.png"), 
+    panel_left, 590, controls_height, controls_height);
+  ry = new StrokeButton("ry", loadImage("stroke_icon_ry.png"), 
+    panel_left + 70, 590, controls_height, controls_height);
   // Add buttons to array
   buttons[0] = none;
   buttons[1] = horizontal;
   buttons[2] = vertical;
   buttons[3] = quarters;
-  buttons[4] = black;
-  buttons[5] = white;
+  buttons[4] = white;
+  buttons[5] = black;
+  buttons[6] = bw;
+  buttons[7] = gb;
+  buttons[8] = rb;
+  buttons[9] = ry;
   // Create canvas
   clearCanvas();
-  // Set default symmetry to none
-  none.setSymmetry();
 }
 
 ////////// END SETUP //////////
@@ -83,11 +97,11 @@ void draw() {
     y += (targetY - y) * easing;
     // Change stroke weight depending on mouse speed
     stroke_weight = dist(px, py, x, y);
-    // Set lower limit for stroke_weight
     if (stroke_weight < 5) {
+      // Set lower limit for stroke_weight
       stroke_weight = 5;
-      // Set upper limit for stroke_weight
     } else if (stroke_weight > 100) {
+      // Set upper limit for stroke_weight
       stroke_weight = 100;
     }
     strokeWeight(stroke_weight);
@@ -95,8 +109,8 @@ void draw() {
     if (mousePressed) {
       if (mouseX > margin && mouseX < margin + canvas_w &&
         mouseY > margin && mouseY < margin + canvas_h) {
+        setStrokeColor();
         line(px, py, x, y);
-        symmetry_source = createImage(canvas_w, canvas_h, RGB);
         drawSymmetry();
       }
     }
@@ -137,7 +151,46 @@ void clearCanvas() {
   }
 }
 
+void setStrokeColor() {
+  if (brush_stroke == "bw") {
+    if (canvas_bg == 0) {
+      stroke(255);
+    } else if (canvas_bg == 1) {
+      stroke(0);
+    }
+  } else {
+    float r = 0;
+    float g = 0;
+    float b = 0;
+    if (brush_stroke == "gb") {
+      r = 0;
+      g = map(mouseX, margin, margin + canvas_w, 100, 255);
+      b = map(mouseY, margin, margin + canvas_h, 100, 255);
+    } else if (brush_stroke == "rb") {
+      r = map(mouseX, margin, margin + canvas_w, 100, 255);
+      g = 0;
+      b = map(mouseY, margin, margin + canvas_h, 100, 255);
+    } else if (brush_stroke == "ry") {
+      r = 255;
+      // Map g diagonally from upper right to bottom left
+      g = map(
+        sqrt(pow(margin+canvas_w - mouseX, 2) + pow(mouseY, 2)), 
+        margin, sqrt(pow(margin + canvas_w, 2) + pow(margin + canvas_h, 2)), 
+        0, 255
+        );
+      // Map b diagonaly from upper left to bottom right
+      b = map(
+        sqrt(pow(mouseX, 2) + pow(mouseY, 2)), 
+        margin, sqrt(pow(margin + canvas_w, 2) + pow(margin + canvas_h, 2)), 
+        0, 100
+        );
+    }
+    stroke(color(r, g, b));
+  }
+}
+
 void drawSymmetry() {
+  symmetry_source = createImage(canvas_w, canvas_h, RGB);
   switch(canvas_symmetry) {
   case 0:
     break;
@@ -238,8 +291,8 @@ void drawSymmetry() {
 
 class ClearPill {
   float x, y, w, h;
-  float padding_x = 20.0;
-  float padding_y = 10.0;
+  float padding_x = 23.0;
+  float padding_y = 11.0;
 
   ClearPill(float x, float y, float w, float h) {
     // Shift to compensate for arc button edge
@@ -338,7 +391,7 @@ class Button {
     rect(x, y, w, h, button_radius);
     image(icon, x, y, h, h);
   }
-  
+
   public void checkMouseOver() {
   }
 }
@@ -407,6 +460,40 @@ class BgButton extends Button {
 
   public void setBg() {
     canvas_bg = bg;
+    createSelected();
+    clearCanvas();
+  }
+}
+
+class StrokeButton extends Button {
+  String stroke;
+
+  StrokeButton(String stroke, PImage icon, 
+    float x, float y, float w, float h) {
+    super(icon, x, y, w, h);
+    this.stroke = stroke;
+  }
+
+  public void checkMouseOver() {
+    if (super.isMouseOver() && mousePressed) {
+      setStroke();
+    } else if (super.isMouseOver()) {
+      if (brush_stroke == stroke) {
+        super.createSelected();
+      } else {
+        super.createHighlighted();
+      }
+    } else {
+      if (brush_stroke == stroke) {
+        super.createSelected();
+      } else {
+        super.createDefault();
+      }
+    }
+  }
+
+  public void setStroke() {
+    brush_stroke = stroke;
     createSelected();
     clearCanvas();
   }
