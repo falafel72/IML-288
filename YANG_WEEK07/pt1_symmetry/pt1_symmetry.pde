@@ -74,6 +74,8 @@ void setup() {
   buttons[9] = ry;
   // Create canvas
   clearCanvas();
+  // Create PImage to enable symmetry functionality
+  symmetry_source = createImage(canvas_w, canvas_h, RGB);
 }
 
 ////////// END SETUP //////////
@@ -189,8 +191,6 @@ void setStrokeColor() {
 }
 
 void drawSymmetry() {
-  // Create PImage using the same dimensions as the canvas
-  symmetry_source = createImage(canvas_w, canvas_h, RGB);
   switch(canvas_symmetry) {
   case 0:
     // If canvas_symmetry == 0, do nothing
