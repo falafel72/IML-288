@@ -37,10 +37,12 @@ void setup() {
   // Create controls
   textAlign(LEFT, TOP);
   textFont(system_font);
+  // Canvas
   fill(0);
   text("CANVAS", panel_left, 50);
   ellipseMode(CORNER);
   clear = new ClearPill(panel_left, 90, 110, controls_height);
+  // Symmetry
   fill(0);
   text("SYMMETRY", panel_left, 170);
   none = new SymmetryButton(0, loadImage("sym_icon_n.png"), 
@@ -51,12 +53,14 @@ void setup() {
     panel_left, 280, controls_height, controls_height);
   quarters = new SymmetryButton(3, loadImage("sym_icon_q.png"), 
     panel_left + 70, 280, controls_height, controls_height);
+  // Background
   fill(0);
   text("BACKGROUND", panel_left, 360);
   white = new BgButton(1, loadImage("bg_icon_w.png"), 
     panel_left, 400, controls_height, controls_height);
   black = new BgButton(0, loadImage("bg_icon_b.png"), 
     panel_left + 70, 400, controls_height, controls_height);
+  // Stroke
   fill(0);
   text("STROKE", panel_left, 480);
   bw = new StrokeButton("bw", loadImage("stroke_icon_bw.png"), 
@@ -105,7 +109,7 @@ void draw() {
       stroke_weight = 100;
     }
     strokeWeight(stroke_weight);
-    // If mousePressed, then draw line
+    // If mouse pressed, then draw line
     if (mousePressed) {
       if (mouseX > margin && mouseX < margin + canvas_w &&
         mouseY > margin && mouseY < margin + canvas_h) {
@@ -123,6 +127,7 @@ void draw() {
 }
 
 void clearCanvas() {
+  // Create canvas
   strokeWeight(1);
   if (canvas_bg == 0) {
     fill(0);
@@ -130,6 +135,7 @@ void clearCanvas() {
     fill(255);
   }
   rect(margin, margin, canvas_w, canvas_h);
+  // Create guides
   stroke(guides);
   switch(canvas_symmetry) {
   case 0:
@@ -152,6 +158,7 @@ void clearCanvas() {
 }
 
 void setStrokeColor() {
+  // For default bw, set stroke to opposite of background color
   if (brush_stroke == "bw") {
     if (canvas_bg == 0) {
       stroke(255);
@@ -174,14 +181,16 @@ void setStrokeColor() {
       r = 255;
       // Map g diagonally from upper right to bottom left
       g = map(
+        // Pythagoras, using an inverted x
         sqrt(pow(margin+canvas_w - mouseX, 2) + pow(mouseY, 2)), 
-        margin, sqrt(pow(margin + canvas_w, 2) + pow(margin + canvas_h, 2)), 
+        // Upper and lower corners of canvas
+        margin, sqrt(pow(margin+canvas_w, 2) + pow(margin+canvas_h, 2)), 
         0, 255
         );
       // Map b diagonaly from upper left to bottom right
       b = map(
         sqrt(pow(mouseX, 2) + pow(mouseY, 2)), 
-        margin, sqrt(pow(margin + canvas_w, 2) + pow(margin + canvas_h, 2)), 
+        margin, sqrt(pow(margin+canvas_w, 2) + pow(margin+canvas_h, 2)), 
         0, 100
         );
     }
@@ -190,12 +199,15 @@ void setStrokeColor() {
 }
 
 void drawSymmetry() {
+  // Create PImage using the same dimensions as the canvas
   symmetry_source = createImage(canvas_w, canvas_h, RGB);
   switch(canvas_symmetry) {
   case 0:
+    // If canvas_symmetry == 0, do nothing
     break;
   case 1:
     if (mouseX <= margin + canvas_w/2) {
+      // Get left half of canvas and reflect it horizontally
       symmetry_source = get(margin, margin, canvas_w/2 - 1, canvas_h);
       pushMatrix();
       translate(margin + canvas_w/4, margin + canvas_h/2);
@@ -203,6 +215,7 @@ void drawSymmetry() {
       image(symmetry_source, -canvas_w*3/4 - 1, -canvas_h/2);
       popMatrix();
     } else if (mouseX > margin + canvas_w/2) {
+      // Get right half of canvas and reflect it horizontally
       symmetry_source = get(margin + canvas_w/2 + 1, margin, canvas_w/2 - 1, canvas_h);
       pushMatrix();
       translate(margin + canvas_w*3/4, margin + canvas_h/2);
@@ -213,6 +226,7 @@ void drawSymmetry() {
     break;
   case 2:
     if (mouseY <= margin + canvas_h/2) {
+      // Get upper half of canvas and reflect it vertically
       symmetry_source = get(margin, margin, canvas_w, canvas_h/2 - 1);
       pushMatrix();
       translate(margin + canvas_w/2, margin + canvas_h/4);
@@ -220,6 +234,7 @@ void drawSymmetry() {
       image(symmetry_source, -canvas_w/2, -canvas_h*3/4 - 1);
       popMatrix();
     } else if (mouseY > margin + canvas_h/2) {
+      // Get lower half of canvas and reflect it vertically
       symmetry_source = get(margin, margin + canvas_h/2 + 1, canvas_w, canvas_h/2 - 1);
       pushMatrix();
       translate(margin + canvas_w/2, margin + canvas_h*3/4);
@@ -230,12 +245,14 @@ void drawSymmetry() {
     break;
   case 3:
     if (mouseX <= margin + canvas_w/2 && mouseY <= margin + canvas_h/2) {
+      // Get upper left quadrant of canvas and reflect it horizontally
       symmetry_source = get(margin, margin, canvas_w/2 - 1, canvas_h/2 - 1);
       pushMatrix();
       translate(margin + canvas_w/4, margin + canvas_h/4);
       scale(-1, 1);
       image(symmetry_source, -canvas_w*3/4 - 1, -canvas_h/4);
       popMatrix();
+      // Get new upper half of canvas and reflect it vertically
       symmetry_source = get(margin, margin, canvas_w, canvas_h/2);
       pushMatrix();
       translate(margin + canvas_w/2, margin + canvas_h/4);
@@ -243,12 +260,14 @@ void drawSymmetry() {
       image(symmetry_source, -canvas_w/2, -canvas_h*3/4 - 1);
       popMatrix();
     } else if (mouseX > margin + canvas_w/2 && mouseY <= margin + canvas_h/2) {
+      // Get upper right quadrant of canvas and reflect it horizontally
       symmetry_source = get(margin + canvas_w/2 + 1, margin, canvas_w/2 - 1, canvas_h/2 - 1);
       pushMatrix();
       translate(margin + canvas_w*3/4, margin + canvas_h/4);
       scale(-1, 1);
       image(symmetry_source, canvas_w/4, -canvas_h/4);
       popMatrix();
+      // Get new upper half of canvas and reflect it vertically
       symmetry_source = get(margin, margin, canvas_w, canvas_h/2);
       pushMatrix();
       translate(margin + canvas_w/2, margin + canvas_h/4);
@@ -256,12 +275,14 @@ void drawSymmetry() {
       image(symmetry_source, -canvas_w/2, -canvas_h*3/4 - 1);
       popMatrix();
     } else if (mouseX <= margin + canvas_w/2 && mouseY > margin + canvas_h/2) {
+      // Get lower left quadrant of canvas and reflect it horizontally
       symmetry_source = get(margin, margin + canvas_h/2 + 1, canvas_w/2 - 1, canvas_h/2 - 1);
       pushMatrix();
       translate(margin + canvas_w/4, margin + canvas_h*3/4);
       scale(-1, 1);
       image(symmetry_source, -canvas_w*3/4 - 1, -canvas_h/4 + 1);
       popMatrix();
+      // Get new lower half of canvas and reflect it vertically
       symmetry_source = get(margin, margin + canvas_h/2 + 1, canvas_w, canvas_h/2 - 1);
       pushMatrix();
       translate(margin + canvas_w/2, margin + canvas_h*3/4);
@@ -269,12 +290,14 @@ void drawSymmetry() {
       image(symmetry_source, -canvas_w/2, canvas_h/4);
       popMatrix();
     } else if (mouseX > margin + canvas_w/2 && mouseY > margin + canvas_h/2) {
+      // Get lower right quadrant of canvas and reflect it horizontally
       symmetry_source = get(margin + canvas_w/2 + 1, margin + canvas_h/2 + 1, canvas_w/2 - 1, canvas_h/2 - 1);
       pushMatrix();
       translate(margin + canvas_w*3/4, margin + canvas_h*3/4);
       scale(-1, 1);
       image(symmetry_source, canvas_w/4, -canvas_h/4 + 1);
       popMatrix();
+      // Get new lower half of canvas and reflect it vertically
       symmetry_source = get(margin, margin + canvas_h/2 + 1, canvas_w, canvas_h/2 - 1);
       pushMatrix();
       translate(margin + canvas_w/2, margin + canvas_h*3/4);
@@ -287,21 +310,22 @@ void drawSymmetry() {
 
 ////////// END DRAW //////////
 
-////////// BUTTON CONTROLS //////////
+////////// CLEAR PILL //////////
 
 class ClearPill {
   float x, y, w, h;
-  float padding_x = 23.0;
-  float padding_y = 11.0;
+  float padding_x = 23;
+  float padding_y = 11;
 
   ClearPill(float x, float y, float w, float h) {
-    // Shift to compensate for arc button edge
+    // Shift slightly left to compensate for arc of button edge
     this.x = x - 10;
     this.y = y;
     this.w = w;
     this.h = h;
   }
-
+  
+  // Create different icon states based on mouse control
   public void checkMouseOver() {
     if (isMouseOver() && mousePressed) {
       createPressed();
@@ -348,6 +372,10 @@ class ClearPill {
   }
 }
 
+////////// END CLEAR PILL //////////
+
+////////// BUTTONS //////////
+
 class Button {
   float x, y, w, h;
   PImage icon;
@@ -363,6 +391,9 @@ class Button {
     this.icon = icon;
 
     createDefault();
+  }
+
+  public void checkMouseOver() {
   }
 
   boolean isMouseOver() {
@@ -391,9 +422,6 @@ class Button {
     rect(x, y, w, h, button_radius);
     image(icon, x, y, h, h);
   }
-
-  public void checkMouseOver() {
-  }
 }
 
 class SymmetryButton extends Button {
@@ -406,6 +434,7 @@ class SymmetryButton extends Button {
     this.icon = icon;
   }
 
+  // Create different icon states based on mouse control and canvas symmetry
   public void checkMouseOver() {
     if (super.isMouseOver() && mousePressed) {
       setSymmetry();
@@ -440,6 +469,7 @@ class BgButton extends Button {
     this.bg = bg;
   }
 
+  // Create different icon states based on mouse control and canvas background
   public void checkMouseOver() {
     if (super.isMouseOver() && mousePressed) {
       setBg();
@@ -474,6 +504,7 @@ class StrokeButton extends Button {
     this.stroke = stroke;
   }
 
+  // Create different icon states based on mouse control and brush stroke
   public void checkMouseOver() {
     if (super.isMouseOver() && mousePressed) {
       setStroke();
@@ -499,7 +530,7 @@ class StrokeButton extends Button {
   }
 }
 
-////////// END BUTTON CONTROLS //////////
+////////// END BUTTONS //////////
 
 ////////// MOUSE CONTROL //////////
 
