@@ -19,7 +19,9 @@ void draw() {
     stars.get(i).die();
     if (stars.get(i).getAlpha() <= 0) {
       stars.remove(i);
-      i--; 
+      i--;
+      stars.add(new Star(random(width), random(height),
+        random(diam_lower, diam_upper), random(255)));
     }
   }
 }
