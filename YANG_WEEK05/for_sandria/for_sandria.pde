@@ -54,6 +54,10 @@ void setup() {
 
   // Create sine oscillator
   sine = new SinOsc(this);
+  // TO-DO: change direction of every other line of notes
+  //for (int i = 0; i < freqs.length; i += 5) {
+    
+  //}
 }
 
 void draw() {
