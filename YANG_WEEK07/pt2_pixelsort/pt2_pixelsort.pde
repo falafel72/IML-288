@@ -13,7 +13,7 @@
  
  */
 
-int mode = 2;
+int mode = 1;
 
 // image path is relative to sketch directory
 PImage img1;
