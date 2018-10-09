@@ -11,9 +11,10 @@ float stroke_weight;
 // CONTROLS
 int controls_left_x = 900;
 int controls_height = 48;
-PFont en_system_font, en_button_font, zh_font, zh_char_font;
+PFont en_system_font, en_button_font, zh_char_font;
 ClearButton clear;
-UndoButton undo;
+// TO FIX: UNDO FUNCTIONALITY
+//UndoButton undo;
 TemplateButton love, learn, life;
 
 ////////// SETUP //////////
@@ -25,10 +26,11 @@ void setup() {
   // Create fonts
   en_system_font = createFont("Karla-Regular.ttf", 32);
   en_button_font = createFont("Karla-Bold.ttf", 24);
-  zh_font = createFont("bodang-xingkai.ttf", 32);
   zh_char_font = createFont("bodang-xingkai.ttf", 500);
   textAlign(LEFT, TOP);
   // Create controls
+  // TO FIX: UNDO FUNCTIONALITY
+  //undo = new UndoButton(controls_left_x, margin, 87, 48);
   clear = new ClearButton(controls_left_x, margin, 92, 48);
   textFont(en_system_font);
   fill(0);
@@ -82,6 +84,14 @@ void clearCanvas() {
   rect(margin, margin, canvas_w, canvas_h);
 }
 
+// TO FIX: UNDO FUNCTIONALITY
+//void createCanvas(PImage state) {
+//  stroke(0);
+//  strokeWeight(1);
+//  fill(255);
+//  rect(margin, margin, canvas_w, canvas_h);
+//}
+
 void checkMouseDraw() {
   if (mousePressed) {
     if (mouseX > margin && mouseX < margin + canvas_w &&
@@ -100,9 +110,15 @@ class Button {
   float x, y, w, h;
   float padding = 10.0;
   String text;
-  
-  Button() {}
-  
+
+  Button() {
+    x = 0;
+    y = 0;
+    w = 0;
+    h = 0;
+    text = "";
+  }
+
   Button(float x, float y, float w, float h, String text) {
     this.x = x;
     this.y = y;
@@ -110,7 +126,7 @@ class Button {
     this.h = h;
     this.text = text;
   }
-  
+
   void createDefault() {
     fill(220);
     stroke(0);
@@ -121,7 +137,7 @@ class Button {
     textFont(en_button_font);
     text(text, x + padding, y + padding);
   }
-  
+
   void createHighlighted() {
     fill(230);
     stroke(0);
@@ -144,20 +160,38 @@ class Button {
   }
 }
 
+// TO FIX: UNDO FUNCTIONALITY
+// Reference: https://forum.processing.org/two/discussion/7953/redo-and-undo-button-in-paint-like-app
+//class UndoButton extends Button {
+//  int state = 0;
+//  ArrayList<PImage> states = new ArrayList<PImage>();
+
+//  UndoButton(float x, float y, float w, float h) {
+//    super(x, y, w, h, "UNDO");
+//  }
+
+//  void mouseReleased() {
+//    states.add(get(margin, margin, canvas_w, canvas_h));
+//    state++;
+//  }
+
+//  void mousePressed() {
+//    if (mouseX > x && mouseX < x + w &&
+//      mouseY > y && mouseY < y + h &&
+//      ) {
+//        undo();
+//    }
+//  }
+  
+//  void undo() {
+//    state--;
+//    createCanvas(states.get(state));
+//  }
+//}
+
 class ClearButton extends Button {
   ClearButton(float x, float y, float w, float h) {
     super(x, y, w, h, "CLEAR");
-  }
-}
-
-class UndoButton {
-  float x, y;
-  float w;
-  float h;
-  
-  UndoButton(float x, float y) {
-    this.x = x;
-    this.y = y;
   }
 }
 
@@ -168,7 +202,6 @@ class TemplateButton extends Button {
     float x, float y, float w, float h) {
     super(x, y, w, h, display_text);
     this.character = character;
-    super.createDefault();
   }
 
   public void showCharacter() {
@@ -189,6 +222,11 @@ void checkMouseControl() {
       clearCanvas();
     }
   }
+  // TO FIX: UNDO FUNCTIONALITY
+  //if (undo.isMouseOver()) {
+  //  if (mousePressed) {
+  //  }
+  //}
   if (love.isMouseOver()) {
     if (mousePressed) {
       love.showCharacter();
