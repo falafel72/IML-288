@@ -44,7 +44,8 @@ void draw() {
     x_speed = -x_speed;
   } else if (x >= paddle2_x - diam/2 &&
     x < width &&
-    abs(y - paddle1_y) < paddle_h/2) {
+    abs(y - paddle2_y) < paddle_h/2) {
+      println(1);
     x_speed = -x_speed;
   } else if (x < -diam/2) {
     score2++;
