@@ -1,22 +1,10 @@
 // Sally sprite: opengameart.org/content/48-animated-old-school-rpg-characters-16x16
 //// (CC-BY 3.0)
 // Forest tiles: opengameart.org/content/forest-tiles (CC0)
-// Plant sprites: opengameart.org/content/sci-fi-plants-and-crystal-things-isometric (CC-BY 3.0)
+// Plant sprites: opengameart.org/content/sci-fi-plants-and-crystal-things-isometric
+//// (CC-BY 3.0)
 
-PImage sally;
-PImage faceb_still, faceb_walkr, faceb_walkl;
-PImage facer_still, facer_walk;
-PImage facef_still, facef_walkr, facef_walkl;
-PImage facel_still, facel_walk;
-int sprite;
-int walk_start;
-int anim_delay = 150;
-
-int sprite_w = 32;
-int sprite_h = 64;
-float sprite_x, sprite_y;
-float step = 8;
-String dir;
+Sally sally;
 
 PImage forest;
 PImage grass;
@@ -29,21 +17,14 @@ PImage[][] plant_growths = new PImage[8][4];
 int plant_w = 96;
 ArrayList<Plant> plants = new ArrayList<Plant>();
 
+int anim_delay = 150;
+
 void setup() {
   size(720, 720);
+  imageMode(CENTER);
 
   // SALLY
-  sally = loadImage("SallyJones.png");
-  faceb_still = sally.get(16, 0, sprite_w, sprite_h);
-  faceb_walkr = sally.get(16, 64, sprite_w, sprite_h);
-  faceb_walkl = sally.get(80, 64, sprite_w, sprite_h);
-  facer_still = sally.get(16, 128, sprite_w, sprite_h);
-  facer_walk = sally.get(80, 128, sprite_w, sprite_h);
-  facef_still = sally.get(144, 0, sprite_w, sprite_h);
-  facef_walkr = sally.get(80, 192, sprite_w, sprite_h);
-  facef_walkl = sally.get(16, 192, sprite_w, sprite_h);
-  facel_still = sally.get(16, 256, sprite_w, sprite_h);
-  facel_walk = sally.get(80, 256, sprite_w, sprite_h);
+  sally = new Sally();
 
   // BACKGROUND
   forest = loadImage("forest_tiles.png");
@@ -69,14 +50,8 @@ void setup() {
     }
   }
 
-  sprite = 0;
-  dir = "d";
-  imageMode(CENTER);
-  sprite_x = width/2;
-  sprite_y = width/2;
   createBackground();
   createPlants();
-  walk_start = millis();
 }
 
 void createBackground() {
@@ -103,28 +78,108 @@ void createPlants() {
 void draw() {
   image(bg, width/2, height/2);
   updatePlants();
-  paintSprite();
-  if (mouseX > sprite_x - sprite_w/2 && mouseX < sprite_x + sprite_w/2 &&
-    mouseY > sprite_y - sprite_h/2 && mouseY < sprite_y + sprite_h/2 &&
-    sprite == 0) {
-    //println("hover");
-  } else {
-    //println("not hover");
-  }
+  sally.paintSprite();
+  //if (mouseX > sprite_x - sprite_w/2 && mouseX < sprite_x + sprite_w/2 &&
+  //mouseY > sprite_y - sprite_h/2 && mouseY < sprite_y + sprite_h/2 &&
+  //sprite == 0) {
+  //println("hover");
+  //} else {
+  //println("not hover");
+  //}
 }
 
 void keyPressed() {
   if (keyCode == UP || keyCode == RIGHT || keyCode == DOWN || keyCode == LEFT) {
-    if (keyCode == UP) {
+    sally.updateMovement(keyCode);
+  }
+}
+
+void keyReleased() {
+  sally.stopMovement();
+}
+
+class Sally {
+  float sprite_x, sprite_y;
+  float step = 8;
+  int sprite;
+  int walk_start;
+  String dir;
+
+  PImage sally_sprites;
+  PImage faceb_still, faceb_walkr, faceb_walkl;
+  PImage facer_still, facer_walk;
+  PImage facef_still, facef_walkr, facef_walkl;
+  PImage facel_still, facel_walk;
+  int sprite_w = 32;
+  int sprite_h = 64;
+
+  Sally() {
+    sally_sprites = loadImage("SallyJones.png");
+    faceb_still = sally_sprites.get(16, 0, sprite_w, sprite_h);
+    faceb_walkr = sally_sprites.get(16, 64, sprite_w, sprite_h);
+    faceb_walkl = sally_sprites.get(80, 64, sprite_w, sprite_h);
+    facer_still = sally_sprites.get(16, 128, sprite_w, sprite_h);
+    facer_walk = sally_sprites.get(80, 128, sprite_w, sprite_h);
+    facef_still = sally_sprites.get(144, 0, sprite_w, sprite_h);
+    facef_walkr = sally_sprites.get(80, 192, sprite_w, sprite_h);
+    facef_walkl = sally_sprites.get(16, 192, sprite_w, sprite_h);
+    facel_still = sally_sprites.get(16, 256, sprite_w, sprite_h);
+    facel_walk = sally_sprites.get(80, 256, sprite_w, sprite_h);
+
+    sprite = 0;
+    dir = "d";
+    sprite_x = width/2;
+    sprite_y = width/2;
+    walk_start = millis();
+  }
+
+  public void paintSprite() {
+    if (dir == "u") {
+      if (sprite == 0) {
+        image(faceb_still, sprite_x, sprite_y);
+      } else if (sprite % 2 == 0) {
+        image(faceb_walkr, sprite_x, sprite_y);
+      } else if (sprite % 2 == 1) {
+        image(faceb_walkl, sprite_x, sprite_y);
+      }
+    } else if (dir == "r") {
+      if (sprite == 0) {
+        image(facer_still, sprite_x, sprite_y);
+      } else if (sprite % 2 == 0) {
+        image(facer_still, sprite_x, sprite_y);
+      } else if (sprite % 2 == 1) {
+        image(facer_walk, sprite_x, sprite_y);
+      }
+    } else if (dir == "d") {
+      if (sprite == 0) {
+        image(facef_still, sprite_x, sprite_y);
+      } else if (sprite % 2 == 0) {
+        image(facef_walkr, sprite_x, sprite_y);
+      } else if (sprite % 2 == 1) {
+        image(facef_walkl, sprite_x, sprite_y);
+      }
+    } else if (dir == "l") {
+      if (sprite == 0) {
+        image(facel_still, sprite_x, sprite_y);
+      } else if (sprite % 2 == 0) {
+        image(facel_still, sprite_x, sprite_y);
+      } else if (sprite % 2 == 1) {
+        image(facel_walk, sprite_x, sprite_y);
+      }
+    }
+  }
+
+  public void updateMovement(int k) {
+    if (k == UP) {
       dir = "u";
       sprite_y -= step;
-    } else if (keyCode == RIGHT) {
+    } else if (k == RIGHT) {
       dir = "r";
       sprite_x += step;
-    } else if (keyCode == DOWN) {
+    } else if (k == DOWN) {
       dir = "d";
       sprite_y += step;
-    } else if (keyCode == LEFT) {
+    } else if (k == LEFT) {
       dir = "l";
       sprite_x -= step;
     }
@@ -134,45 +189,17 @@ void keyPressed() {
       sprite++;
     }
   }
-}
 
-void keyReleased() {
-  sprite = 0;
-}
+  public void stopMovement() {
+    sprite = 0;
+  }
 
-void paintSprite() {
-  if (dir == "u") {
-    if (sprite == 0) {
-      image(faceb_still, sprite_x, sprite_y);
-    } else if (sprite % 2 == 0) {
-      image(faceb_walkr, sprite_x, sprite_y);
-    } else if (sprite % 2 == 1) {
-      image(faceb_walkl, sprite_x, sprite_y);
-    }
-  } else if (dir == "r") {
-    if (sprite == 0) {
-      image(facer_still, sprite_x, sprite_y);
-    } else if (sprite % 2 == 0) {
-      image(facer_still, sprite_x, sprite_y);
-    } else if (sprite % 2 == 1) {
-      image(facer_walk, sprite_x, sprite_y);
-    }
-  } else if (dir == "d") {
-    if (sprite == 0) {
-      image(facef_still, sprite_x, sprite_y);
-    } else if (sprite % 2 == 0) {
-      image(facef_walkr, sprite_x, sprite_y);
-    } else if (sprite % 2 == 1) {
-      image(facef_walkl, sprite_x, sprite_y);
-    }
-  } else if (dir == "l") {
-    if (sprite == 0) {
-      image(facel_still, sprite_x, sprite_y);
-    } else if (sprite % 2 == 0) {
-      image(facel_still, sprite_x, sprite_y);
-    } else if (sprite % 2 == 1) {
-      image(facel_walk, sprite_x, sprite_y);
-    }
+  public float getX() {
+    return sprite_x;
+  }
+
+  public float getY() {
+    return sprite_y;
   }
 }
 
@@ -182,7 +209,7 @@ class Plant {
   int stage = 0;
   int bloom = 0;
   int bloom_start = 0;
-  
+
   Plant() {
     plant_x = random(width);
     plant_y = random(height);
@@ -190,9 +217,9 @@ class Plant {
     updateStage();
     bloom_start = millis();
   }
-  
+
   public void updateStage() {
-    if (dist(plant_x, plant_y, sprite_x, sprite_y) < 50) {
+    if (dist(plant_x, plant_y, sally.getX(), sally.getY()) < 50) {
       if (bloom == 0) {
         bloom = 1;
       }
@@ -201,7 +228,7 @@ class Plant {
     }
     bloomAnim();
   }
-  
+
   void bloomAnim() {
     if (bloom == 1) {
       if (millis() > bloom_start + anim_delay && stage < plant_growths[type].length - 1) {
