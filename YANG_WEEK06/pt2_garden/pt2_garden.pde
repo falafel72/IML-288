@@ -97,7 +97,6 @@ void createBackground() {
 void createPlants() {
   for (int i = 0; i < int(random(80, 100)); i++) {
     plants.add(new Plant());
-    println("add");
   }
 }
 
@@ -194,15 +193,28 @@ class Plant {
   
   public void updateStage() {
     if (dist(plant_x, plant_y, sprite_x, sprite_y) < 50) {
-      //if (bloom == 0) {
-      //  while (bloom != 1) {
-          
-      //  }
-      //  stage = 3;
-      //}
-      stage = 3;
+      if (bloom == 0) {
+        bloom = 1;
+      }
     } else {
-      stage = 0;
+      bloom = -1;
+    }
+    bloomAnim();
+  }
+  
+  void bloomAnim() {
+    if (bloom == 1) {
+      if (millis() > bloom_start + anim_delay && stage < plant_growths[type].length - 1) {
+        stage++;
+      } else {
+        bloom = 0;
+      }
+    } else if (bloom == -1) {
+      if (millis() > bloom_start + anim_delay && stage > 0) {
+        stage--;
+      } else {
+        bloom = 0;
+      }
     }
     image(plant_growths[type][stage], plant_x, plant_y);
   }
