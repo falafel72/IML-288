@@ -11,14 +11,14 @@
 Sally sally;
 
 PImage forest;
+int tile_w = 60;
 PImage grass;
 PImage[] bg_features = new PImage[13];
 PImage bg;
-int tile_w = 60;
 
 PImage plant_sheet;
-PImage[][] plant_growths = new PImage[8][4];
 int plant_w = 96;
+PImage[][] plant_sprites = new PImage[8][4];
 ArrayList<Plant> plants = new ArrayList<Plant>();
 
 int anim_delay = 150;
@@ -52,9 +52,9 @@ void setup() {
 
   // PLANTS
   plant_sheet = loadImage("plant_sheet.png");
-  for (int i = 0; i < plant_growths.length; i++) {
-    for (int j = 0; j < plant_growths[i].length; j++) {
-      plant_growths[i][j] = plant_sheet.get(0 + j*plant_w, 0 + i*plant_w, plant_w, plant_w);
+  for (int i = 0; i < plant_sprites.length; i++) {
+    for (int j = 0; j < plant_sprites[i].length; j++) {
+      plant_sprites[i][j] = plant_sheet.get(0 + j*plant_w, 0 + i*plant_w, plant_w, plant_w);
     }
   }
 
@@ -63,13 +63,14 @@ void setup() {
 }
 
 void createBackground() {
-  int f;
+  int type;
   for (int i = tile_w/2; i < width; i += tile_w) {
     for (int j = tile_w/2; j < height; j += tile_w) {
       image(grass, i, j);
-      f = int(random(96));
-      if (f < 13) {
-        image(bg_features[f], i, j);
+      // Chance of bg_feature in that tile is 1 in 7
+      type = int(random(91));
+      if (type < 13) {
+        image(bg_features[type], i, j);
       }
     }
   }
@@ -78,6 +79,7 @@ void createBackground() {
 }
 
 void createPlants() {
+  // Create random number of plants
   for (int i = 0; i < int(random(150, 200)); i++) {
     plants.add(new Plant());
   }
@@ -91,7 +93,8 @@ void draw() {
 
 void keyPressed() {
   if (keyCode == UP || keyCode == RIGHT || keyCode == DOWN || keyCode == LEFT) {
-    sally.updateMovement(keyCode);
+    //sally.updateMovement(keyCode);
+    sally.updateMovement();
   }
 }
 
@@ -142,6 +145,7 @@ class Sally {
   }
 
   public void checkHover() {
+    // If hover and Sally is standing still
     if (mouseX > sprite_x - sprite_w/2 && mouseX < sprite_x + sprite_w/2 &&
       mouseY > sprite_y - sprite_h/2 && mouseY < sprite_y + sprite_h/2 &&
       sprite == 0) {
@@ -165,16 +169,20 @@ class Sally {
       if (sprite == 0) {
         image(faceb_still, sprite_x, sprite_y);
       } else if (sprite % 2 == 0) {
+        // Every even step is the walkr sprite
         image(faceb_walkr, sprite_x, sprite_y);
       } else if (sprite % 2 == 1) {
+        // Every odd step is the walkl sprite
         image(faceb_walkl, sprite_x, sprite_y);
       }
     } else if (dir == "r") {
       if (sprite == 0) {
         image(facer_still, sprite_x, sprite_y);
       } else if (sprite % 2 == 0) {
+        // Every even step is the still sprite
         image(facer_still, sprite_x, sprite_y);
       } else if (sprite % 2 == 1) {
+        // Every odd step is the walk sprite
         image(facer_walk, sprite_x, sprite_y);
       }
     } else if (dir == "d") {
@@ -196,17 +204,17 @@ class Sally {
     }
   }
 
-  public void updateMovement(int k) {
-    if (k == UP) {
+  public void updateMovement() {
+    if (keyCode == UP) {
       dir = "u";
       sprite_y -= step;
-    } else if (k == RIGHT) {
+    } else if (keyCode == RIGHT) {
       dir = "r";
       sprite_x += step;
-    } else if (k == DOWN) {
+    } else if (keyCode == DOWN) {
       dir = "d";
       sprite_y += step;
-    } else if (k == LEFT) {
+    } else if (keyCode == LEFT) {
       dir = "l";
       sprite_x -= step;
     }
@@ -240,13 +248,14 @@ class Plant {
   Plant() {
     plant_x = random(width);
     plant_y = random(height);
-    type = int(random(plant_growths.length));
+    type = int(random(plant_sprites.length));
     updateStage();
     bloom_start = millis();
   }
 
   public void updateStage() {
     if (dist(plant_x, plant_y, sally.getX(), sally.getY()) < 100) {
+      // Trigger bloom
       if (bloom == 0) {
         bloom = 1;
       }
@@ -258,7 +267,7 @@ class Plant {
 
   void bloomAnim() {
     if (bloom == 1) {
-      if (millis() > bloom_start + anim_delay && stage < plant_growths[type].length - 1) {
+      if (millis() > bloom_start + anim_delay && stage < plant_sprites[type].length - 1) {
         stage++;
         bloom_start = millis();
       } else {
@@ -272,7 +281,7 @@ class Plant {
         bloom = 0;
       }
     }
-    image(plant_growths[type][stage], plant_x, plant_y);
+    image(plant_sprites[type][stage], plant_x, plant_y);
   }
 }
 
