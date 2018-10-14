@@ -34,30 +34,21 @@ void setup() {
   forest = loadImage("forest_sheet.png");
   grass = forest.get(0, 0, tile_w, tile_w);
   int counter = 0;
-  for (int i = counter; i < 3; i++) {
-    bg_features[i] = forest.get(0 + i*tile_w, 60, tile_w, tile_w);
+  // Stumps
+  for (int i = 0; i < 3; i++) {
+    bg_features[counter] = forest.get(0 + i*tile_w, 60, tile_w, tile_w);
     counter++;
   }
-  for (int i = counter; i < 7; i++) {
-    bg_features[i] = forest.get(0 + i*tile_w, 120, tile_w, tile_w);
+  // Rocks
+  for (int i = 0; i < 4; i++) {
+    bg_features[counter] = forest.get(0 + i*tile_w, 120, tile_w, tile_w);
     counter++;
   }
-  for (int i = counter; i < 13; i++) {
-    bg_features[i] = forest.get(0 + i*tile_w, 180, tile_w, tile_w);
+  // Bushes
+  for (int i = 0; i < 6; i++) {
+    bg_features[counter] = forest.get(0 + i*tile_w, 180, tile_w, tile_w);
     counter++;
   }
-  //bg_features[0] = forest.get(0, 120, tile_w, tile_w);
-  //bg_features[1] = forest.get(60, 180, tile_w, tile_w);
-  //bg_features[2] = forest.get(120, 120, tile_w, tile_w);
-  //bg_features[3] = forest.get(0, 240, tile_w, tile_w);
-  //bg_features[4] = forest.get(60, 300, tile_w, tile_w);
-  //bg_features[5] = forest.get(120, 240, tile_w, tile_w);
-  //bg_features[6] = forest.get(180, 300, tile_w, tile_w);
-  //bg_features[7] = forest.get(0, 360, tile_w, tile_w);
-  //bg_features[8] = forest.get(60, 420, tile_w, tile_w);
-  //bg_features[9] = forest.get(120, 360, tile_w, tile_w);
-  //bg_features[10] = forest.get(180, 420, tile_w, tile_w);
-  //bg_features[11] = forest.get(240, 360, tile_w, tile_w);
 
   // PLANTS
   plant_sheet = loadImage("plant_sheet.png");
