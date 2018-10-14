@@ -4,11 +4,15 @@
 // Plant sprites: opengameart.org/content/sci-fi-plants-and-crystal-things-isometric
 //// (CC-BY 3.0)
 
+// Instructions:
+// Use arrow keys to move Sally around the garden.
+// Hover over Sally while she's standing still to make her turn around. 
+
 Sally sally;
 
 PImage forest;
 PImage grass;
-PImage[] bg_features = new PImage[12];
+PImage[] bg_features = new PImage[13];
 PImage bg;
 int tile_w = 60;
 
@@ -27,20 +31,33 @@ void setup() {
   sally = new Sally();
 
   // BACKGROUND
-  forest = loadImage("forest_tiles.png");
+  forest = loadImage("forest_sheet.png");
   grass = forest.get(0, 0, tile_w, tile_w);
-  bg_features[0] = forest.get(0, 120, tile_w, tile_w);
-  bg_features[1] = forest.get(60, 180, tile_w, tile_w);
-  bg_features[2] = forest.get(120, 120, tile_w, tile_w);
-  bg_features[3] = forest.get(0, 240, tile_w, tile_w);
-  bg_features[4] = forest.get(60, 300, tile_w, tile_w);
-  bg_features[5] = forest.get(120, 240, tile_w, tile_w);
-  bg_features[6] = forest.get(180, 300, tile_w, tile_w);
-  bg_features[7] = forest.get(0, 360, tile_w, tile_w);
-  bg_features[8] = forest.get(60, 420, tile_w, tile_w);
-  bg_features[9] = forest.get(120, 360, tile_w, tile_w);
-  bg_features[10] = forest.get(180, 420, tile_w, tile_w);
-  bg_features[11] = forest.get(240, 360, tile_w, tile_w);
+  int counter = 0;
+  for (int i = counter; i < 3; i++) {
+    bg_features[i] = forest.get(0 + i*tile_w, 60, tile_w, tile_w);
+    counter++;
+  }
+  for (int i = counter; i < 7; i++) {
+    bg_features[i] = forest.get(0 + i*tile_w, 120, tile_w, tile_w);
+    counter++;
+  }
+  for (int i = counter; i < 13; i++) {
+    bg_features[i] = forest.get(0 + i*tile_w, 180, tile_w, tile_w);
+    counter++;
+  }
+  //bg_features[0] = forest.get(0, 120, tile_w, tile_w);
+  //bg_features[1] = forest.get(60, 180, tile_w, tile_w);
+  //bg_features[2] = forest.get(120, 120, tile_w, tile_w);
+  //bg_features[3] = forest.get(0, 240, tile_w, tile_w);
+  //bg_features[4] = forest.get(60, 300, tile_w, tile_w);
+  //bg_features[5] = forest.get(120, 240, tile_w, tile_w);
+  //bg_features[6] = forest.get(180, 300, tile_w, tile_w);
+  //bg_features[7] = forest.get(0, 360, tile_w, tile_w);
+  //bg_features[8] = forest.get(60, 420, tile_w, tile_w);
+  //bg_features[9] = forest.get(120, 360, tile_w, tile_w);
+  //bg_features[10] = forest.get(180, 420, tile_w, tile_w);
+  //bg_features[11] = forest.get(240, 360, tile_w, tile_w);
 
   // PLANTS
   plant_sheet = loadImage("plant_sheet.png");
@@ -60,7 +77,7 @@ void createBackground() {
     for (int j = tile_w/2; j < height; j += tile_w) {
       image(grass, i, j);
       f = int(random(96));
-      if (f < 12) {
+      if (f < 13) {
         image(bg_features[f], i, j);
       }
     }
@@ -70,7 +87,7 @@ void createBackground() {
 }
 
 void createPlants() {
-  for (int i = 0; i < int(random(80, 100)); i++) {
+  for (int i = 0; i < int(random(150, 200)); i++) {
     plants.add(new Plant());
   }
 }
@@ -78,14 +95,7 @@ void createPlants() {
 void draw() {
   image(bg, width/2, height/2);
   updatePlants();
-  sally.paintSprite();
-  //if (mouseX > sprite_x - sprite_w/2 && mouseX < sprite_x + sprite_w/2 &&
-  //mouseY > sprite_y - sprite_h/2 && mouseY < sprite_y + sprite_h/2 &&
-  //sprite == 0) {
-  //println("hover");
-  //} else {
-  //println("not hover");
-  //}
+  sally.update();
 }
 
 void keyPressed() {
@@ -103,6 +113,7 @@ class Sally {
   float step = 8;
   int sprite;
   int walk_start;
+  int rotate_start;
   String dir;
 
   PImage sally_sprites;
@@ -131,6 +142,31 @@ class Sally {
     sprite_x = width/2;
     sprite_y = width/2;
     walk_start = millis();
+    rotate_start = millis();
+  }
+
+  public void update() {
+    checkHover();
+    paintSprite();
+  }
+
+  public void checkHover() {
+    if (mouseX > sprite_x - sprite_w/2 && mouseX < sprite_x + sprite_w/2 &&
+      mouseY > sprite_y - sprite_h/2 && mouseY < sprite_y + sprite_h/2 &&
+      sprite == 0) {
+      if (millis() > rotate_start + anim_delay) {
+        if (dir == "u") {
+          dir = "r";
+        } else if (dir == "r") {
+          dir = "d";
+        } else if (dir == "d") {
+          dir = "l";
+        } else if (dir == "l") {
+          dir = "u";
+        }
+        rotate_start = millis();
+      }
+    }
   }
 
   public void paintSprite() {
@@ -185,8 +221,8 @@ class Sally {
     }
     // Timing code from forum.processing.org/one/topic/timing-animation-with-millis.html
     if (millis() > walk_start + anim_delay) {
-      walk_start = millis();
       sprite++;
+      walk_start = millis();
     }
   }
 
@@ -219,7 +255,7 @@ class Plant {
   }
 
   public void updateStage() {
-    if (dist(plant_x, plant_y, sally.getX(), sally.getY()) < 50) {
+    if (dist(plant_x, plant_y, sally.getX(), sally.getY()) < 100) {
       if (bloom == 0) {
         bloom = 1;
       }
@@ -233,12 +269,14 @@ class Plant {
     if (bloom == 1) {
       if (millis() > bloom_start + anim_delay && stage < plant_growths[type].length - 1) {
         stage++;
+        bloom_start = millis();
       } else {
         bloom = 0;
       }
     } else if (bloom == -1) {
       if (millis() > bloom_start + anim_delay && stage > 0) {
         stage--;
+        bloom_start = millis();
       } else {
         bloom = 0;
       }
