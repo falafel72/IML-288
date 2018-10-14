@@ -11,17 +11,22 @@ int sprite;
 int startTime;
 int delay = 150;
 
+int w = 32;
+int h = 64;
+float x, y;
+float step = 8;
+String dir;
+
 PImage forest;
 PImage grass;
 PImage[] bg_features = new PImage[12];
 PImage bg;
 int tile_w = 60;
 
-int w = 32;
-int h = 64;
-float x, y;
-float step = 8;
-String dir;
+PImage plant_sheet;
+PImage[][] plant_growths = new PImage[8][4];
+int plant_w = 96;
+ArrayList<Plant> plants = new ArrayList<Plant>();
 
 void setup() {
   size(720, 720);
@@ -38,7 +43,7 @@ void setup() {
   facef_walkl = sally.get(16, 192, w, h);
   facel_still = sally.get(16, 256, w, h);
   facel_walk = sally.get(80, 256, w, h);
-  
+
   // BACKGROUND
   forest = loadImage("forest_tiles.png");
   grass = forest.get(0, 0, tile_w, tile_w);
@@ -55,6 +60,14 @@ void setup() {
   bg_features[10] = forest.get(180, 420, tile_w, tile_w);
   bg_features[11] = forest.get(240, 360, tile_w, tile_w);
 
+  // PLANTS
+  plant_sheet = loadImage("plant_sheet.png");
+  for (int i = 0; i < plant_growths.length; i++) {
+    for (int j = 0; j < plant_growths[i].length; j++) {
+      plant_growths[i][j] = plant_sheet.get(0 + j*plant_w, 0 + i*plant_w, plant_w, plant_w);
+    }
+  }
+
   sprite = 0;
   dir = "d";
   imageMode(CENTER);
@@ -62,6 +75,7 @@ void setup() {
   y = width/2;
   //background(255);
   createBackground();
+  createPlants();
   startTime = millis();
 }
 
@@ -80,14 +94,21 @@ void createBackground() {
   bg = get();
 }
 
+void createPlants() {
+  for (int i = 0; i < int(random(80, 100)); i++) {
+    plants.add(new Plant());
+    println("add");
+  }
+}
+
 void draw() {
   paintSprite();
   if (mouseX > x - w/2 && mouseX < x + w/2 &&
     mouseY > y - h/2 && mouseY < y + h/2 &&
     sprite == 0) {
-    println("hover");
+    //println("hover");
   } else {
-    println("not hover");
+    //println("not hover");
   }
 }
 
@@ -120,7 +141,7 @@ void keyReleased() {
 
 void paintSprite() {
   //background(255);
-  image(bg, width/2, height/2);
+  //image(bg, width/2, height/2);
   if (dir == "u") {
     if (sprite == 0) {
       image(faceb_still, x, y);
@@ -153,5 +174,18 @@ void paintSprite() {
     } else if (sprite % 2 == 1) {
       image(facel_walk, x, y);
     }
+  }
+}
+
+class Plant {
+  float x, y;
+  int type;
+  int stage = 0;
+  
+  Plant() {
+    x = random(width);
+    y = random(height);
+    type = int(random(plant_growths.length));
+    image(plant_growths[type][stage], x, y);
   }
 }
