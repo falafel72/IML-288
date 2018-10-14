@@ -12,12 +12,13 @@ int h = 64;
 float x = 50;
 float y = 50;
 float x_speed, y_speed;
+float step = 8;
 String dir;
 
 void setup() {
   size(720, 720);
   
-  sally = loadImage("SallyJones_big.png");
+  sally = loadImage("SallyJones.png");
   faceb_still = sally.get(16, 0, w, h);
   faceb_walkr = sally.get(16, 64, w, h);
   faceb_walkl = sally.get(80, 64, w, h);
@@ -46,12 +47,16 @@ void keyPressed() {
   if (keyCode == UP || keyCode == RIGHT || keyCode == DOWN || keyCode == LEFT) {
     if (keyCode == UP) {
       dir = "u";
+      y -= step;
     } else if (keyCode == RIGHT) {
       dir = "r";
+      x += step;
     } else if (keyCode == DOWN) {
       dir = "d";
+      y += step;
     } else if (keyCode == LEFT) {
       dir = "l";
+      x -= step;
     }
     // Timing code from forum.processing.org/one/topic/timing-animation-with-millis.html
     if (millis() > startTime + delay) {
