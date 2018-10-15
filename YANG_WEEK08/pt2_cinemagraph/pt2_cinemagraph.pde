@@ -11,6 +11,13 @@ void setup() {
 
 void draw() {
   background(#EFB9C0);
+  // Teacup
   shape(teacup, width/2, 495);
-  shape(teapot, 828, 295);
+  // Teapot
+  pushMatrix();
+  translate(828, 295);
+  println(millis());
+  rotate(0.1 * sin(0.001 * millis()));
+  shape(teapot, 0, 0);
+  popMatrix();
 }
