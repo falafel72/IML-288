@@ -24,7 +24,8 @@ void setup() {
 }
 
 void draw() {
-  background(0);
+  //background(0);
+  background(#2C2B33);
   paddle1.drawPaddle();
   paddle2.drawPaddle();
   createPowerUp();
@@ -156,19 +157,27 @@ class Paddle {
   }
 
   public void makeLonger() {
-    h += 10;
+    if (h < height/2) {
+      h += 10;
+    }
   }
 
   public void makeShorter() {
-    h -= 10;
+    if (h > 10) {
+      h -= 10;
+    }
   }
 
   public void makeQuicker() {
-    shift += 10;
+    if (shift < 160) {
+      shift += 10;
+    }
   }
 
   public void makeSlower() {
-    shift -= 10;
+    if (shift > 10) {
+      shift -= 10;
+    }
   }
 
   public float getX() {
