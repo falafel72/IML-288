@@ -74,7 +74,6 @@ class Ball {
     ellipse(x, y, diam, diam);
     x += x_speed;
     y += y_speed;
-    // y
     if (y < diam/2) {
       y = diam/2;
       y_speed = -y_speed;
@@ -82,23 +81,20 @@ class Ball {
       y = height - diam/2;
       y_speed = -y_speed;
     }
-    // x
-    if (x <= paddle1.getX() + diam/2 &&
-      x > 0 &&
+    if (x <= paddle1.getX() + paddle1.getWidth()/2 + diam/2 &&
       abs(y - paddle1.getY()) < paddle1.getHeight()/2) {
+      x = paddle1.getX() + paddle1.getWidth()/2 + diam/2;
       x_speed = -x_speed;
-    } else if (x >= paddle2.getX() - diam/2 &&
-      x < width &&
+    } else if (x >= paddle2.getX() - paddle2.getWidth()/2 - diam/2 &&
       abs(y - paddle2.getY()) < paddle2.getHeight()/2) {
+      x = paddle2.getX() - paddle2.getWidth()/2 - diam/2;
       x_speed = -x_speed;
     } else if (x < -diam/2) {
       paddle2.increaseScore();
-      x = width/2;
-      y = height/2;
+      resetWithRandom();
     } else if (x > width + diam/2) {
       paddle1.increaseScore();
-      x = width/2;
-      y = height/2;
+      resetWithRandom();
     }
   }
 
