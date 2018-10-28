@@ -8,8 +8,8 @@ color[] colors = {
   color(50, 55, 65, alpha)
 };
 Tile[] tiles = new Tile[144];
-int anim_delay = 2000;
-float transition_frequency = 0.001;
+int anim_delay = 3000;
+float transition_frequency = 0.0005;
 
 void setup() {
   size(720, 720);
