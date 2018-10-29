@@ -1,6 +1,6 @@
 public class Star {
-  static final float diam_upper = 10.0;
-  static final float diam_lower = 2.0;
+  static final float diam_upper = 6.0;
+  static final float diam_lower = 1.0;
   
   float x, y;
   float diam;
@@ -17,8 +17,10 @@ public class Star {
   }
 
   public void die() {
-    fill(255, alpha - 5);
-    ellipse(x, y, diam + 5, diam + 5);
+    if (alpha >= 5) {
+      fill(255, alpha - 5);
+      ellipse(x, y, diam + 5, diam + 5);
+    }
     fill(255, alpha);
     ellipse(x, y, diam, diam);
     alpha -= die_rate;
