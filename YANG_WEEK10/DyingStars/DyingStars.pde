@@ -10,7 +10,6 @@ void setup() {
 }
 
 void draw() {
-  //filter(BLUR, 5);
   background(0);
   for (int i = 0; i < stars.size(); i++) {
     stars.get(i).die();
