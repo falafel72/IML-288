@@ -1,6 +1,6 @@
 float a = 200.0; // amplitude
 float b = 0.02; // period = TWO_PI/b
-float c; // vertical shift
+//float c; // vertical shift
 float d; // horizontal shift
 float x_step = 0.2;
 float x_speed = 0.1;
@@ -17,7 +17,7 @@ void setup() {
   size(1280, 720, P3D);
   ortho();
   rectMode(CENTER);
-  c = float(height)/2.0;
+  //c = float(height)/2.0;
 }
 
 void draw() {
@@ -111,7 +111,6 @@ void drawXGraph() {
   for (float x = -width/2+x_padding; x < width/2-x_padding; x += x_step) {
     pushMatrix();
     translate(x, a*sin(b*(x-d)), 0);
-    //ellipse(x, a*sin(b*(x-d))+c, weight, weight);
     ellipse(0, 0, weight, weight);
     popMatrix();
   }
@@ -127,7 +126,6 @@ void drawYGraph() {
   for (float x = -width/2+x_padding; x < width/2-x_padding; x += x_step) {
     pushMatrix();
     translate(x, a*sin(b*(x-d)), 0);
-    //ellipse(x, a*sin(b*(x-d))+c, weight, weight);
     ellipse(0, 0, weight, weight);
     popMatrix();
   }
