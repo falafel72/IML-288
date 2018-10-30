@@ -16,12 +16,22 @@ void draw() {
   x[0] = mouseX;
   y[0] = mouseY;
   // draw the array positions;
-  for (int i = 0; i < x.length; i++) {
+  for (int i = 1; i < x.length; i++) {
     noStroke();
-    fill(255, 255 - i/float(x.length) * 255);
-    diam = 50.0 - i/float(x.length) * 50.0;
-    ellipse(x[i], y[i], diam, diam);
-    stroke(255, 255 - i/float(x.length) * 255);
-    line(width/2, height/2, x[i], y[i]);
+    float fraction = i/float(x.length);
+    //fill(255, 255 - fraction * 255);
+    fill(255.0 - fraction * 255.0);
+    diam = 10.0 - fraction * 10.0;
+    //diam = 100.0 * fraction;
+    //ellipse(x[i], y[i], diam, diam);
+    //stroke(255, 255 - fraction * 255);
+    stroke(255.0 - fraction * 255.0);
+    //line(width/2, height/2, x[i], y[i]);
+    float y_val = sin(2.0 * TWO_PI * fraction) * 100;
+    line(x[i], y[i] - y_val, x[i], y[i]);
+    line(x[i], y[i] + y_val, x[i], y[i]);
+    ellipse(x[i], y[i] - y_val, diam, diam);
+    ellipse(x[i], y[i] + y_val, diam, diam);
+    //line(x[i - 1], y[i - 1], x[i], y[i]);
   }
 }
