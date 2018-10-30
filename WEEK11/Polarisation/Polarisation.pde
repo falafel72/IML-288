@@ -33,7 +33,7 @@ void drawAxes() {
   // left x
   pushMatrix();
   translate(width/2, height/2, 0);
-  translate(-width/2+x_padding, 0, 0);
+  translate(-width/2+x_padding, -height/2+y_padding, 0);
   rotateX(radians(35.264));
   rotateY(-radians(45));
   drawArrowLine(-width/2+x_padding, 0, width/2-x_padding, 0);
