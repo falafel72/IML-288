@@ -12,11 +12,10 @@ class Pie {
   }
   
   void update() {
-    
+    pie_offset += 0.1;
   }
   
   void display() {
-    stroke(255);
     float line_offset = pie_offset;
     for (int i = 0; i < line_count; i++) {
       float rad = map(i, 0, line_count, 0, TWO_PI);
@@ -24,6 +23,5 @@ class Pie {
       line(x, y, x + cos(rad) * line_len, y + sin(rad) * line_len);
       line_offset += 0.2;
     }
-    pie_offset += 0.1;
   }
 }
