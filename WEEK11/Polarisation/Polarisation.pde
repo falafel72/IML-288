@@ -8,7 +8,7 @@ float x_step = 0.2;
 float x_speed = 0.1;
 float weight = 5.0;
 
-float x_padding = 200.0;
+float x_padding = 300.0;
 float y_padding = 100.0;
 
 color green = color(26, 122, 28);
@@ -36,24 +36,32 @@ void drawAxes() {
   // left x
   pushMatrix();
   translate(width/2, height/2, 0);
-  translate(-width/2+x_padding, -height/2+y_padding, 0);
   rotateX(radians(35.264));
+  rotateZ(radians(45));
+  translate(-width/2+x_padding, 0, 0);
+  pushMatrix();
+  rotateZ(-radians(45));
   rotateY(-radians(45));
   drawArrowLine(-width/2+x_padding, 0, width/2-x_padding, 0);
   noStroke();
   fill(red(red), green(red), blue(red), 100);
   rect(0, 0, 100, 100);
   popMatrix();
+  popMatrix();
   // left y
   pushMatrix();
   translate(width/2, height/2, 0);
-  translate(-width/2+x_padding, -height/2+y_padding, 0);
   rotateX(radians(35.264));
+  rotateZ(radians(45));
+  translate(-width/2+x_padding, 0, 0);
+  pushMatrix();
+  rotateZ(-radians(45));
   rotateY(radians(45));
   drawArrowLine(0, -height/2+y_padding, 0, height/2-y_padding);
   noStroke();
   fill(red(blue), green(blue), blue(blue), 100);
   rect(0, 0, 100, 100);
+  popMatrix();
   popMatrix();
   // z
   pushMatrix();
@@ -68,24 +76,29 @@ void drawAxes() {
   // right x
   pushMatrix();
   translate(width/2, height/2, 0);
-  translate(width/2-x_padding, height/2-y_padding, 0);
   rotateX(radians(35.264));
+  rotateZ(radians(45));
+  translate(width/2-x_padding, 0, 0);
+  pushMatrix();
+  rotateZ(-radians(45));
   rotateY(-radians(45));
   drawArrowLine(-width/2+x_padding, 0, width/2-x_padding, 0);
-  //noStroke();
-  //fill(red(red), green(red), blue(red), 100);
-  //rect(0, 0, 100, 100);
+  popMatrix();
   popMatrix();
   // right y
   pushMatrix();
   translate(width/2, height/2, 0);
-  translate(width/2-x_padding, height/2-y_padding, 0);
   rotateX(radians(35.264));
+  rotateZ(radians(45));
+  translate(width/2-x_padding, 0, 0);
+  pushMatrix();
+  rotateZ(-radians(45));
   rotateY(radians(45));
   drawArrowLine(0, -height/2+y_padding, 0, height/2-y_padding);
   noStroke();
   fill(red(blue), green(blue), blue(blue), 100);
   rect(0, 0, 100, 100);
+  popMatrix();
   popMatrix();
 }
 
@@ -139,8 +152,11 @@ void drawCircle() {
   // right
   pushMatrix();
   translate(width/2, height/2, 0);
-  translate(width/2-x_padding, height/2-y_padding, 0);
   rotateX(radians(35.264));
+  rotateZ(radians(45));
+  translate(width/2-x_padding, 0, 0);
+  pushMatrix();
+  rotateX(-radians(35.264));
   rotateY(-radians(45));
   noStroke();
   fill(red(red), green(red), blue(red), 100);
@@ -149,5 +165,6 @@ void drawCircle() {
   float x = a*sin(b*(0-d));
   float y = a*cos(b*(0-d));
   drawArrowLine(0, 0, x, y);
+  popMatrix();
   popMatrix();
 }
