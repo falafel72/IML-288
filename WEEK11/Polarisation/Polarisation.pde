@@ -1,6 +1,8 @@
+// Insp: edmundoptics.de/resources/application-notes/optics/introduction-to-polarization
+
 float a = 200.0; // amplitude
 float b = 0.02; // period = TWO_PI/b
-//float c; // vertical shift
+float c; // vertical shift
 float d; // horizontal shift
 float x_step = 0.2;
 float x_speed = 0.1;
@@ -17,7 +19,7 @@ void setup() {
   size(1280, 720, P3D);
   ortho();
   rectMode(CENTER);
-  //c = float(height)/2.0;
+  c = float(height)/2.0;
 }
 
 void draw() {
@@ -27,6 +29,7 @@ void draw() {
   d = x_speed * millis();
   drawXGraph();
   drawYGraph();
+  drawCircle();
 }
 
 void drawAxes() {
@@ -69,9 +72,9 @@ void drawAxes() {
   rotateX(radians(35.264));
   rotateY(-radians(45));
   drawArrowLine(-width/2+x_padding, 0, width/2-x_padding, 0);
-  noStroke();
-  fill(red(red), green(red), blue(red), 100);
-  rect(0, 0, 100, 100);
+  //noStroke();
+  //fill(red(red), green(red), blue(red), 100);
+  //rect(0, 0, 100, 100);
   popMatrix();
   // right y
   pushMatrix();
@@ -129,5 +132,22 @@ void drawYGraph() {
     ellipse(0, 0, weight, weight);
     popMatrix();
   }
+  popMatrix();
+}
+
+void drawCircle() {
+  // right
+  pushMatrix();
+  translate(width/2, height/2, 0);
+  translate(width/2-x_padding, height/2-y_padding, 0);
+  rotateX(radians(35.264));
+  rotateY(-radians(45));
+  noStroke();
+  fill(red(red), green(red), blue(red), 100);
+  ellipse(0, 0, 2*a, 2*a);
+  noFill();
+  float x = a*sin(b*(0-d));
+  float y = a*cos(b*(0-d));
+  drawArrowLine(0, 0, x, y);
   popMatrix();
 }
