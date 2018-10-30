@@ -30,9 +30,10 @@ void draw() {
 }
 
 void drawAxes() {
-  // x
+  // left x
   pushMatrix();
   translate(width/2, height/2, 0);
+  translate(-width/2+x_padding, 0, 0);
   rotateX(radians(35.264));
   rotateY(-radians(45));
   drawArrowLine(-width/2+x_padding, 0, width/2-x_padding, 0);
@@ -40,9 +41,10 @@ void drawAxes() {
   fill(red(red), green(red), blue(red), 100);
   rect(0, 0, 100, 100);
   popMatrix();
-  // y
+  // left y
   pushMatrix();
   translate(width/2, height/2, 0);
+  translate(-width/2+x_padding, -height/2+y_padding, 0);
   rotateX(radians(35.264));
   rotateY(radians(45));
   drawArrowLine(0, -height/2+y_padding, 0, height/2-y_padding);
@@ -58,6 +60,28 @@ void drawAxes() {
   drawArrowLine(-width/2+x_padding, 0, width/2-x_padding, 0);
   noStroke();
   fill(red(green), green(green), blue(green), 100);
+  rect(0, 0, 100, 100);
+  popMatrix();
+  // right x
+  pushMatrix();
+  translate(width/2, height/2, 0);
+  translate(width/2-x_padding, height/2-y_padding, 0);
+  rotateX(radians(35.264));
+  rotateY(-radians(45));
+  drawArrowLine(-width/2+x_padding, 0, width/2-x_padding, 0);
+  noStroke();
+  fill(red(red), green(red), blue(red), 100);
+  rect(0, 0, 100, 100);
+  popMatrix();
+  // right y
+  pushMatrix();
+  translate(width/2, height/2, 0);
+  translate(width/2-x_padding, height/2-y_padding, 0);
+  rotateX(radians(35.264));
+  rotateY(radians(45));
+  drawArrowLine(0, -height/2+y_padding, 0, height/2-y_padding);
+  noStroke();
+  fill(red(blue), green(blue), blue(blue), 100);
   rect(0, 0, 100, 100);
   popMatrix();
 }
@@ -84,7 +108,7 @@ void drawXGraph() {
   rotateX(radians(35.264));
   rotateZ(radians(45));
   fill(green);
-  for (float x = -width/2; x < width/2; x += x_step) {
+  for (float x = -width/2+x_padding; x < width/2-x_padding; x += x_step) {
     pushMatrix();
     translate(x, a*sin(b*(x-d)), 0);
     //ellipse(x, a*sin(b*(x-d))+c, weight, weight);
@@ -100,7 +124,7 @@ void drawYGraph() {
   rotateX(radians(35.264));
   rotateY(radians(45));
   fill(blue);
-  for (float x = -width/2; x < width/2; x += x_step) {
+  for (float x = -width/2+x_padding; x < width/2-x_padding; x += x_step) {
     pushMatrix();
     translate(x, a*sin(b*(x-d)), 0);
     //ellipse(x, a*sin(b*(x-d))+c, weight, weight);
