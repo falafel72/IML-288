@@ -49,7 +49,8 @@ class BouncyBall {
     fill(c);
     ellipse(x, y, diam, diam);
     for (int i = 0; i < trail_x.length; i++) {
-      fill(c, 255 - i/float(trail_x.length) * 255);
+      float fraction = i/float(trail_x.length);
+      fill(c, 255 - fraction * 255);
       ellipse(trail_x[i], trail_y[i], diam, diam);
     }
   }
