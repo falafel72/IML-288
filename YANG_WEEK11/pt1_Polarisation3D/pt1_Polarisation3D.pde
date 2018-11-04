@@ -31,13 +31,17 @@ void setup() {
 void draw() {
   background(255);
   x_shift = x_speed * millis();
+  // Set values for x and y
   x = a*cos(b*0 - x_shift);
   y = a*sin(b*0 - x_shift);
+  // Allow camera to be controlled by mouse position
   camera(mouseX, mouseY, depth, width/2, height/2, -depth/2, 0, 1, -1);
   pushMatrix();
   translate(width/2, height/2, 0);
+  // Set perspective
   rotateX(-radians(35.264));
   rotateY(radians(45));
+  // For debugging perspective
   if (show_grid) {
     drawGrid();
     pushMatrix();
@@ -79,12 +83,12 @@ void drawCircle() {
 
 void drawAxes() {
   strokeWeight(1);
-  // front
+  // Front
   stroke(green);
   drawArrowLine(-a, 0, a, 0);
   stroke(blue);
   drawArrowLine(0, -a, 0, a);
-  // back
+  // Back
   pushMatrix();
   translate(0, 0, -depth);
   stroke(green);
@@ -94,10 +98,10 @@ void drawAxes() {
   popMatrix();
   // z
   pushMatrix();
-  // reset
+  // Reset original matrix
   rotateY(-radians(45));
   rotateX(radians(35.264));
-  // rotate
+  // New transformation matrix
   rotateX(radians(54.58));
   rotateZ(radians(45));
   translate(-depth/2, 0, 0);
@@ -106,12 +110,10 @@ void drawAxes() {
   popMatrix();
 }
 
-// antiplastik on https://processing.org/discourse/beta/num_1219607845.html
+// Code from antiplastik https://processing.org/discourse/beta/num_1219607845.html
 void drawArrowLine(float x1, float y1, float x2, float y2) {
-  //stroke(0);
-  //strokeWeight(2);
-  //strokeCap(PROJECT);
   line(x1, y1, x2, y2);
+  // Arrow
   pushMatrix();
   translate(x2, y2);
   float a = atan2(x1 - x2, y2 - y1);
@@ -172,6 +174,7 @@ void drawXY() {
   ellipse(x, y, weight, weight);
 }
 
+// Displays when XY peaks on the x or y axis
 void drawPeakCircle() {
   fill(255, 255);
   strokeWeight(2);
