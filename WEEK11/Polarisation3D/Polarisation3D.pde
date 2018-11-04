@@ -1,15 +1,15 @@
 // Insp: edmundoptics.de/resources/application-notes/optics/introduction-to-polarization
 
+// TO-DO:
+// Colour fill waves
+// Make one wave much smaller than the other?
+
 float a = 200.0; // amplitude
 float b = 0.02; // period = TWO_PI/b
-float c; // vertical shift
-float d; // horizontal shift
 float x_step = 0.2;
 float x_speed = 0.001;
 float weight = 5.0;
 
-float x_padding = 300.0;
-float y_padding = 100.0;
 float depth = 600.0;
 
 color green = color(26, 122, 28);
@@ -49,8 +49,8 @@ void draw() {
   drawYGraph();
   drawX();
   drawY();
-  drawCombination();
-  drawMatch();
+  drawXY();
+  drawPeak();
   popMatrix();
 }
 
@@ -58,11 +58,11 @@ void drawGrid() {
   strokeWeight(1);
   stroke(0, alpha);
   noFill();
-  for (float i = -width/2 + x_padding; i < width/2 - x_padding; i += grid_size) {
-    line(i, -height/2 + y_padding, i, height/2 - y_padding);
+  for (float i = -width/2; i < width/2; i += grid_size) {
+    line(i, -height/2, i, height/2);
   }
-  for (float i = -height/2 + y_padding; i < height/2 - y_padding; i += grid_size) {
-    line(-width/2 + x_padding, i, width/2 - x_padding, i);
+  for (float i = -height/2; i < height/2; i += grid_size) {
+    line(-width/2, i, width/2, i);
   }
   //box(a);
 }
@@ -161,7 +161,7 @@ void drawYGraph() {
   }
 }
 
-void drawCombination() {
+void drawXY() {
   fill(red);
   strokeWeight(2);
   stroke(red);
@@ -170,7 +170,7 @@ void drawCombination() {
   ellipse(x, y, weight, weight);
 }
 
-void drawMatch() {
+void drawPeak() {
   fill(255, 255);
   strokeWeight(2);
   stroke(255, 255);
