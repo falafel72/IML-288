@@ -28,9 +28,9 @@ void draw() {
     if (stars.get(i).getDiam() > explode_diam && !stars.get(i).isExploding()) {
       stars.get(i).explode();
     }
-    //if (stars.get(i).isExploded()) {
-    //  stars.remove(i);
-    //}
+    if (stars.get(i).isExploded()) {
+      stars.remove(i);
+    }
     // Occasionally add a new star
     if (random(1) < prob_new_star) {
       stars.add(new Star());

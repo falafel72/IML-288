@@ -99,13 +99,15 @@ public class Star {
   }
 
   public boolean isExploded() {
-    for (int i = 0; i < particles.size(); i++) {
-      if (particles.get(i).getAlpha() == 0) {
-        particles.remove(i);
+    if (exploding) {
+      for (int i = 0; i < particles.size(); i++) {
+        if (particles.get(i).getAlpha() == 0) {
+          particles.remove(i);
+        }
       }
-    }
-    if (particles.size() == 0) {
-      return true;
+      if (particles.size() == 0) {
+        return true;
+      }
     }
     return false;
   }
