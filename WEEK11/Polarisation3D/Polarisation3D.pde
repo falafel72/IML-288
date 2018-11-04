@@ -6,6 +6,7 @@
 
 float a = 200.0; // amplitude
 float b = 0.02; // period = TWO_PI/b
+float x_shift;
 float x_step = 0.2;
 float x_speed = 0.001;
 float weight = 5.0;
@@ -20,8 +21,7 @@ int alpha = 50;
 boolean show_grid = false;
 float grid_size = 20.0;
 
-float x;
-float y;
+float x, y;
 
 void setup() {
   size(1280, 720, P3D);
@@ -30,8 +30,10 @@ void setup() {
 
 void draw() {
   background(255);
-  x = a*cos(b*0 - x_speed*millis());
-  y = a*sin(b*0 - x_speed*millis());
+  x_shift = x_speed * millis();
+  x = a*cos(b*0 - x_shift);
+  y = a*sin(b*0 - x_shift);
+  camera(mouseX, mouseY, depth, width/2, height/2, -depth/2, 0, 1, -1);
   pushMatrix();
   translate(width/2, height/2, 0);
   rotateX(-radians(35.264));
@@ -50,7 +52,7 @@ void draw() {
   drawX();
   drawY();
   drawXY();
-  drawPeak();
+  drawPeakCircle();
   popMatrix();
 }
 
@@ -134,7 +136,7 @@ void drawXGraph() {
   fill(green);
   for (float z = -depth; z < 0; z += x_step) {
     pushMatrix();
-    translate(a * cos(b*z - x_speed*millis()), 0, z);
+    translate(a*cos(b*z - x_shift), 0, z);
     ellipse(0, 0, weight, weight);
     popMatrix();
   }
@@ -155,7 +157,7 @@ void drawYGraph() {
   fill(blue);
   for (float z = -depth; z < 0; z += x_step) {
     pushMatrix();
-    translate(0, a*sin(b*z - x_speed*millis()), z);
+    translate(0, a*sin(b*z - x_shift), z);
     ellipse(0, 0, weight, weight);
     popMatrix();
   }
@@ -170,7 +172,7 @@ void drawXY() {
   ellipse(x, y, weight, weight);
 }
 
-void drawPeak() {
+void drawPeakCircle() {
   fill(255, 255);
   strokeWeight(2);
   stroke(255, 255);
