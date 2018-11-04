@@ -86,7 +86,7 @@ public class Star {
   public void explode() {
     exploding = true;
     for (int i = 0; i < int(random(50, 100)); i++) {
-      particles.add(new Particle(x, y, diam, alpha));
+      particles.add(new Particle(x, y, diam, color_fill, alpha));
     }
   }
 

@@ -28,6 +28,7 @@ void draw() {
     if (stars.get(i).getDiam() > explode_diam && !stars.get(i).isExploding()) {
       stars.get(i).explode();
     }
+    // Remove exploded stars from ArrayList
     if (stars.get(i).isExploded()) {
       stars.remove(i);
     }
