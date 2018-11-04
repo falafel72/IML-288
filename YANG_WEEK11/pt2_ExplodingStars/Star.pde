@@ -23,6 +23,10 @@ public class Star {
   float color_float;
   color color_fill;
 
+  boolean exploding = false;
+  boolean is_exploded = false;
+  ArrayList<Particle> particles = new ArrayList<Particle>();
+
   Star() {
     x = random(width);
     y = random(height);
@@ -40,7 +44,7 @@ public class Star {
     mass += evolve_rate;
     // Set diam according to mass
     diam = map(mass, mass_lower, mass_upper, diam_lower, diam_upper);
-    
+
     // Set surf_temp according to mass
     // https://astronomy.stackexchange.com/questions/13104/how-to-calculate-the-temperature-of-a-star
     surf_temp = 3000 * pow(mass, 0.54);
@@ -50,24 +54,59 @@ public class Star {
     } else if (surf_temp < surf_temp_lower) {
       surf_temp = surf_temp_lower;
     }
-    
+
     // Set color depending on surf_temp
     color_float = map(surf_temp, surf_temp_lower, surf_temp_upper, 0, colors.length - 1);
     color_fill = lerpColor(colors[floor(color_float)], colors[ceil(color_float)], 
       color_float - floor(color_float));
+
+    if (exploding) {
+      for (int i = 0; i < particles.size(); i++) {
+        particles.get(i).update();
+        particles.get(i).display();
+        if (particles.get(i).getAlpha() == 0) {
+          particles.remove(i);
+        }
+      }
+    }
   }
 
   public void display() {
-    // Add glow behind star, if close enough
-    if (alpha >= 5) {
-      fill(color_fill, alpha - 5);
-      ellipse(x, y, diam + 5, diam + 5);
+    if (!exploding) {
+      // Add glow behind star, if close enough
+      if (alpha >= 5) {
+        fill(color_fill, alpha - 5);
+        ellipse(x, y, diam + 5, diam + 5);
+      }
+      fill(color_fill, alpha);
+      ellipse(x, y, diam, diam);
     }
-    fill(color_fill, alpha);
-    ellipse(x, y, diam, diam);
+  }
+
+  public void explode() {
+    exploding = true;
+    for (int i = 0; i < int(random(50, 100)); i++) {
+      particles.add(new Particle(x, y, diam, alpha));
+    }
   }
 
   public float getDiam() {
     return diam;
+  }
+  
+  public boolean isExploding() {
+    return exploding;
+  }
+
+  public boolean isExploded() {
+    for (int i = 0; i < particles.size(); i++) {
+      if (particles.get(i).getAlpha() == 0) {
+        particles.remove(i);
+      }
+    }
+    if (particles.size() == 0) {
+      return true;
+    }
+    return false;
   }
 }

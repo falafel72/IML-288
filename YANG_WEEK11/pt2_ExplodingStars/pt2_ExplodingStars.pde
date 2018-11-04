@@ -25,10 +25,12 @@ void draw() {
     stars.get(i).evolve();
     stars.get(i).display();
     // If star larger than explode_diam, remove it
-    if (stars.get(i).getDiam() > explode_diam) {
-      stars.remove(i);
-      i--;
+    if (stars.get(i).getDiam() > explode_diam && !stars.get(i).isExploding()) {
+      stars.get(i).explode();
     }
+    //if (stars.get(i).isExploded()) {
+    //  stars.remove(i);
+    //}
     // Occasionally add a new star
     if (random(1) < prob_new_star) {
       stars.add(new Star());
