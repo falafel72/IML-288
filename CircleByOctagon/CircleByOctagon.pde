@@ -4,6 +4,7 @@ Line[][] lines;
 int anim_start;
 int anim_delay = 1000;
 int layers_display;
+boolean looping = true;
 
 void setup() {
   size(720, 720);
@@ -42,6 +43,21 @@ void setup() {
 
   anim_start = millis();
   layers_display = 0;
+}
+
+void keyPressed() {
+  final int k = keyCode;
+  if (k == ' ') {
+    if (looping) {
+      noLoop();
+    } else { 
+      loop();
+    }
+    looping = !looping;
+  } else if (k == 'R') {
+    looping = true;
+    frameCount = -1; 
+  }
 }
 
 void draw() {
