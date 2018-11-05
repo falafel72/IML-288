@@ -56,6 +56,7 @@ void keyPressed() {
     looping = !looping;
   } else if (k == 'R') {
     looping = true;
+    loop();
     frameCount = -1; 
   }
 }
