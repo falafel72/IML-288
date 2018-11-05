@@ -7,6 +7,7 @@ int layers_display;
 
 void setup() {
   size(720, 720);
+  colorMode(HSB, 360, 100, 100);
 
   lines = new Line[layers][];
   for (int i = 0; i < lines.length; i++) {
@@ -44,9 +45,11 @@ void setup() {
 }
 
 void draw() {
-  background(255);
+  background(0, 0, 100);
   for (int i = 0; i < layers_display; i++) {
     for (int j = 0; j < lines[i].length; j++) {
+      stroke(color(i*360/lines.length, 30, 90));
+      strokeWeight(lines.length + 1 - i);
       lines[i][j].display();
     }
   }

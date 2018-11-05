@@ -11,6 +11,7 @@ public class Line {
     start = new PVector(x1, y1);
     end = new PVector(x2, y2);
     dir = PVector.sub(end, start);
+    frac_display = frac_increment;
   }
 
   public void display() {
