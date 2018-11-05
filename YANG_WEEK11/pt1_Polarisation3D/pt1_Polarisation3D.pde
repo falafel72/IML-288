@@ -13,9 +13,11 @@ float weight = 5.0;
 
 float depth = 600.0;
 
-color green = color(26, 122, 28);
 color blue = color(43, 137, 186);
 color red = color(235, 50, 58);
+//color purple = color(139, 94, 122);
+color purple = color(157, 76, 126);
+color green = color(26, 122, 28);
 int alpha = 50;
 
 boolean show_grid = false;
@@ -70,13 +72,13 @@ void drawGrid() {
   for (float i = -height/2; i < height/2; i += grid_size) {
     line(-width/2, i, width/2, i);
   }
-  //box(a);
+  box(a);
 }
 
 void drawCircle() {
   noFill();
   strokeWeight(1);
-  stroke(red(red), green(red), blue(red), alpha);
+  stroke(red(purple), green(purple), blue(purple), alpha);
   //fill(red(red), green(red), blue(red), alpha);
   ellipse(0, 0, a*2, a*2);
 }
@@ -84,14 +86,14 @@ void drawCircle() {
 void drawAxes() {
   strokeWeight(1);
   // Front
-  stroke(green);
+  stroke(red);
   drawArrowLine(-a, 0, a, 0);
   stroke(blue);
   drawArrowLine(0, -a, 0, a);
   // Back
   pushMatrix();
   translate(0, 0, -depth);
-  stroke(green);
+  stroke(red);
   drawArrowLine(-a, 0, a, 0);
   stroke(blue);
   drawArrowLine(0, -a, 0, a);
@@ -105,7 +107,7 @@ void drawAxes() {
   rotateX(radians(54.58));
   rotateZ(radians(45));
   translate(-depth/2, 0, 0);
-  stroke(0);
+  stroke(green);
   drawArrowLine(-depth/2, 0, depth/2, 0);
   popMatrix();
 }
@@ -125,17 +127,17 @@ void drawArrowLine(float x1, float y1, float x2, float y2) {
 
 void drawX() {
   strokeWeight(2);
-  stroke(red(green), green(green), blue(green), alpha);
+  stroke(red(red), green(red), blue(red), alpha);
   line(0, 0, x, 0);
   line(0, y, x, y);
   noStroke();
-  fill(green);
+  fill(red);
   ellipse(x, 0, weight, weight);
 }
 
 void drawXGraph() {
   noStroke();
-  fill(green);
+  fill(red);
   for (float z = -depth; z < 0; z += x_step) {
     pushMatrix();
     translate(a*cos(b*z - x_shift), 0, z);
@@ -166,9 +168,9 @@ void drawYGraph() {
 }
 
 void drawXY() {
-  fill(red);
-  strokeWeight(2);
-  stroke(red);
+  fill(purple);
+  strokeWeight(3);
+  stroke(purple);
   line(0, 0, x, y);
   noStroke();
   ellipse(x, y, weight, weight);
