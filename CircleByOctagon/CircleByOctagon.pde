@@ -2,7 +2,7 @@ int layers = 8;
 Line[][] lines;
 
 int anim_start;
-int anim_delay = 300;
+int anim_delay = 1000;
 int layers_display;
 
 void setup() {
