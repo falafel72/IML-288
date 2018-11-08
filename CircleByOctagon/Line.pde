@@ -26,11 +26,13 @@ public class Line {
     line(start.x, start.y, end.x, end.y);
   }
 
-  PVector getThird() {
-    return PVector.add(start, PVector.mult(dir, 0.29));
+  PVector getThird(int layer) {
+    float factor = 1/(2*cos(PI/pow(2,layer+1)) + 2);
+    return PVector.add(start, PVector.mult(dir, factor));
   }
 
-  PVector getTwoThirds() {
-    return PVector.add(start, PVector.mult(dir, 0.71));
+  PVector getTwoThirds(int layer) {
+    float factor = 1/(2*cos(PI/pow(2,layer+1)) + 2);
+    return PVector.add(start, PVector.mult(dir, 1 - factor));
   }
 }

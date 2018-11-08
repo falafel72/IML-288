@@ -22,20 +22,20 @@ void setup() {
 
   for (int i = 1; i < lines.length; i++) {
     for (int j = 0; j < lines[i].length; j += 2) {
-      PVector start = lines[i - 1][j/2].getTwoThirds();
+      PVector start = lines[i - 1][j/2].getTwoThirds(i);
       PVector end;
       if (j == lines[i].length - 2) {
-        end = lines[i - 1][0].getThird();
+        end = lines[i - 1][0].getThird(i);
       } else {
-        end = lines[i - 1][j/2 + 1].getThird();
+        end = lines[i - 1][j/2 + 1].getThird(i);
       }
       lines[i][j] = new Line(start.x, start.y, end.x, end.y);
       if (j == lines[i].length - 2) {
-        start = lines[i - 1][0].getThird();
-        end = lines[i - 1][0].getTwoThirds();
+        start = lines[i - 1][0].getThird(i);
+        end = lines[i - 1][0].getTwoThirds(i);
       } else {
-        start = lines[i - 1][j/2 + 1].getThird();
-        end = lines[i - 1][j/2 + 1].getTwoThirds();
+        start = lines[i - 1][j/2 + 1].getThird(i);
+        end = lines[i - 1][j/2 + 1].getTwoThirds(i);
       }
       lines[i][j + 1] = new Line(start.x, start.y, end.x, end.y);
     }
